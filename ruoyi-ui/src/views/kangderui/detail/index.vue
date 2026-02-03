@@ -1,0 +1,764 @@
+<template>
+  <div class="app-container">
+    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
+      <el-form-item label="员工ID" prop="userId">
+        <el-input
+          v-model="queryParams.userId"
+          placeholder="请输入员工ID"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="姓名" prop="nickName">
+        <el-input
+          v-model="queryParams.nickName"
+          placeholder="请输入姓名"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="工资卡号" prop="bankCardNumber">
+        <el-input
+          v-model="queryParams.bankCardNumber"
+          placeholder="请输入工资卡号"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="部门ID" prop="deptId">
+        <el-input
+          v-model="queryParams.deptId"
+          placeholder="请输入部门ID"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="部门名称" prop="deptName">
+        <el-input
+          v-model="queryParams.deptName"
+          placeholder="请输入部门名称"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="工资所属期" prop="salaryPeriod">
+        <el-input
+          v-model="queryParams.salaryPeriod"
+          placeholder="请输入工资所属期"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="基本工资" prop="basicSalary">
+        <el-input
+          v-model="queryParams.basicSalary"
+          placeholder="请输入基本工资"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="日工资" prop="basicDailySalary">
+        <el-input
+          v-model="queryParams.basicDailySalary"
+          placeholder="请输入日工资"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="工作日" prop="basicWorkDays">
+        <el-input
+          v-model="queryParams.basicWorkDays"
+          placeholder="请输入工作日"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="基本工资小计" prop="basicSubtotal">
+        <el-input
+          v-model="queryParams.basicSubtotal"
+          placeholder="请输入基本工资小计"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="全勤奖" prop="allowanceFullAttendance">
+        <el-input
+          v-model="queryParams.allowanceFullAttendance"
+          placeholder="请输入全勤奖"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="安全奖" prop="allowanceSafety">
+        <el-input
+          v-model="queryParams.allowanceSafety"
+          placeholder="请输入安全奖"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="工龄工资" prop="allowanceSeniority">
+        <el-input
+          v-model="queryParams.allowanceSeniority"
+          placeholder="请输入工龄工资"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="职务工资" prop="allowancePosition">
+        <el-input
+          v-model="queryParams.allowancePosition"
+          placeholder="请输入职务工资"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="浮动工资" prop="allowanceFloating">
+        <el-input
+          v-model="queryParams.allowanceFloating"
+          placeholder="请输入浮动工资"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="保密工资" prop="allowanceConfidentiality">
+        <el-input
+          v-model="queryParams.allowanceConfidentiality"
+          placeholder="请输入保密工资"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="交通补贴" prop="allowanceTransportation">
+        <el-input
+          v-model="queryParams.allowanceTransportation"
+          placeholder="请输入交通补贴"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="特种作业证补贴" prop="allowanceSpecialCertificate">
+        <el-input
+          v-model="queryParams.allowanceSpecialCertificate"
+          placeholder="请输入特种作业证补贴"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="节假日补贴" prop="allowanceHoliday">
+        <el-input
+          v-model="queryParams.allowanceHoliday"
+          placeholder="请输入节假日补贴"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="工作表现奖" prop="allowancePerformance">
+        <el-input
+          v-model="queryParams.allowancePerformance"
+          placeholder="请输入工作表现奖"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="安全培训补贴" prop="allowanceSafetyTraining">
+        <el-input
+          v-model="queryParams.allowanceSafetyTraining"
+          placeholder="请输入安全培训补贴"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="绩效考核奖" prop="allowanceAssessment">
+        <el-input
+          v-model="queryParams.allowanceAssessment"
+          placeholder="请输入绩效考核奖"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="加班天数" prop="overtimeDays">
+        <el-input
+          v-model="queryParams.overtimeDays"
+          placeholder="请输入加班天数"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="加班金额" prop="overtimeAmount">
+        <el-input
+          v-model="queryParams.overtimeAmount"
+          placeholder="请输入加班金额"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="中班天数" prop="overtimeMidShiftDays">
+        <el-input
+          v-model="queryParams.overtimeMidShiftDays"
+          placeholder="请输入中班天数"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="中班补贴金额" prop="overtimeMidShiftAmount">
+        <el-input
+          v-model="queryParams.overtimeMidShiftAmount"
+          placeholder="请输入中班补贴金额"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="夜班天数" prop="overtimeNightShiftDays">
+        <el-input
+          v-model="queryParams.overtimeNightShiftDays"
+          placeholder="请输入夜班天数"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="夜班补贴金额" prop="overtimeNightShiftAmount">
+        <el-input
+          v-model="queryParams.overtimeNightShiftAmount"
+          placeholder="请输入夜班补贴金额"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="其它应发小计" prop="allowanceSubtotal">
+        <el-input
+          v-model="queryParams.allowanceSubtotal"
+          placeholder="请输入其它应发小计"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="应发金额" prop="totalEarnings">
+        <el-input
+          v-model="queryParams.totalEarnings"
+          placeholder="请输入应发金额"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="违纪扣款" prop="deductionDiscipline">
+        <el-input
+          v-model="queryParams.deductionDiscipline"
+          placeholder="请输入违纪扣款"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="个人所得税" prop="deductionTax">
+        <el-input
+          v-model="queryParams.deductionTax"
+          placeholder="请输入个人所得税"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="代扣公积金" prop="deductionHousingFund">
+        <el-input
+          v-model="queryParams.deductionHousingFund"
+          placeholder="请输入代扣公积金"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="代扣代缴保险" prop="deductionInsurance">
+        <el-input
+          v-model="queryParams.deductionInsurance"
+          placeholder="请输入代扣代缴保险"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="暂扣工资" prop="deductionWithhold">
+        <el-input
+          v-model="queryParams.deductionWithhold"
+          placeholder="请输入暂扣工资"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="应扣小计" prop="deductionSubtotal">
+        <el-input
+          v-model="queryParams.deductionSubtotal"
+          placeholder="请输入应扣小计"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="实发金额" prop="netSalary">
+        <el-input
+          v-model="queryParams.netSalary"
+          placeholder="请输入实发金额"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
+        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+      </el-form-item>
+    </el-form>
+
+    <el-row :gutter="10" class="mb8">
+      <el-col :span="1.5">
+        <el-button
+          type="primary"
+          plain
+          icon="el-icon-plus"
+          size="mini"
+          @click="handleAdd"
+          v-hasPermi="['kangderui:detail:add']"
+        >新增</el-button>
+      </el-col>
+      <el-col :span="1.5">
+        <el-button
+          type="success"
+          plain
+          icon="el-icon-edit"
+          size="mini"
+          :disabled="single"
+          @click="handleUpdate"
+          v-hasPermi="['kangderui:detail:edit']"
+        >修改</el-button>
+      </el-col>
+      <el-col :span="1.5">
+        <el-button
+          type="danger"
+          plain
+          icon="el-icon-delete"
+          size="mini"
+          :disabled="multiple"
+          @click="handleDelete"
+          v-hasPermi="['kangderui:detail:remove']"
+        >删除</el-button>
+      </el-col>
+      <el-col :span="1.5">
+        <el-button
+          type="warning"
+          plain
+          icon="el-icon-download"
+          size="mini"
+          @click="handleExport"
+          v-hasPermi="['kangderui:detail:export']"
+        >导出</el-button>
+      </el-col>
+      <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
+    </el-row>
+
+    <el-table v-loading="loading" :data="detailList" @selection-change="handleSelectionChange">
+      <el-table-column type="selection" width="55" align="center" />
+      <el-table-column label="主键ID" align="center" prop="salaryDetailId" />
+      <el-table-column label="员工ID" align="center" prop="userId" />
+      <el-table-column label="姓名" align="center" prop="nickName" />
+      <el-table-column label="工资卡号" align="center" prop="bankCardNumber" />
+      <el-table-column label="部门ID" align="center" prop="deptId" />
+      <el-table-column label="部门名称" align="center" prop="deptName" />
+      <el-table-column label="工资所属期" align="center" prop="salaryPeriod" />
+      <el-table-column label="基本工资" align="center" prop="basicSalary" />
+      <el-table-column label="日工资" align="center" prop="basicDailySalary" />
+      <el-table-column label="工作日" align="center" prop="basicWorkDays" />
+      <el-table-column label="基本工资小计" align="center" prop="basicSubtotal" />
+      <el-table-column label="全勤奖" align="center" prop="allowanceFullAttendance" />
+      <el-table-column label="安全奖" align="center" prop="allowanceSafety" />
+      <el-table-column label="工龄工资" align="center" prop="allowanceSeniority" />
+      <el-table-column label="职务工资" align="center" prop="allowancePosition" />
+      <el-table-column label="浮动工资" align="center" prop="allowanceFloating" />
+      <el-table-column label="保密工资" align="center" prop="allowanceConfidentiality" />
+      <el-table-column label="交通补贴" align="center" prop="allowanceTransportation" />
+      <el-table-column label="特种作业证补贴" align="center" prop="allowanceSpecialCertificate" />
+      <el-table-column label="节假日补贴" align="center" prop="allowanceHoliday" />
+      <el-table-column label="工作表现奖" align="center" prop="allowancePerformance" />
+      <el-table-column label="安全培训补贴" align="center" prop="allowanceSafetyTraining" />
+      <el-table-column label="绩效考核奖" align="center" prop="allowanceAssessment" />
+      <el-table-column label="加班天数" align="center" prop="overtimeDays" />
+      <el-table-column label="加班金额" align="center" prop="overtimeAmount" />
+      <el-table-column label="中班天数" align="center" prop="overtimeMidShiftDays" />
+      <el-table-column label="中班补贴金额" align="center" prop="overtimeMidShiftAmount" />
+      <el-table-column label="夜班天数" align="center" prop="overtimeNightShiftDays" />
+      <el-table-column label="夜班补贴金额" align="center" prop="overtimeNightShiftAmount" />
+      <el-table-column label="其它应发小计" align="center" prop="allowanceSubtotal" />
+      <el-table-column label="应发金额" align="center" prop="totalEarnings" />
+      <el-table-column label="违纪扣款" align="center" prop="deductionDiscipline" />
+      <el-table-column label="个人所得税" align="center" prop="deductionTax" />
+      <el-table-column label="代扣公积金" align="center" prop="deductionHousingFund" />
+      <el-table-column label="代扣代缴保险" align="center" prop="deductionInsurance" />
+      <el-table-column label="暂扣工资" align="center" prop="deductionWithhold" />
+      <el-table-column label="应扣小计" align="center" prop="deductionSubtotal" />
+      <el-table-column label="实发金额" align="center" prop="netSalary" />
+      <el-table-column label="备注" align="center" prop="remark" />
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+        <template slot-scope="scope">
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-edit"
+            @click="handleUpdate(scope.row)"
+            v-hasPermi="['kangderui:detail:edit']"
+          >修改</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-delete"
+            @click="handleDelete(scope.row)"
+            v-hasPermi="['kangderui:detail:remove']"
+          >删除</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+    
+    <pagination
+      v-show="total>0"
+      :total="total"
+      :page.sync="queryParams.pageNum"
+      :limit.sync="queryParams.pageSize"
+      @pagination="getList"
+    />
+
+    <!-- 添加或修改员工工资明细对话框 -->
+    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+        <el-form-item label="员工ID" prop="userId">
+          <el-input v-model="form.userId" placeholder="请输入员工ID" />
+        </el-form-item>
+        <el-form-item label="姓名" prop="nickName">
+          <el-input v-model="form.nickName" placeholder="请输入姓名" />
+        </el-form-item>
+        <el-form-item label="工资卡号" prop="bankCardNumber">
+          <el-input v-model="form.bankCardNumber" placeholder="请输入工资卡号" />
+        </el-form-item>
+        <el-form-item label="部门ID" prop="deptId">
+          <el-input v-model="form.deptId" placeholder="请输入部门ID" />
+        </el-form-item>
+        <el-form-item label="部门名称" prop="deptName">
+          <el-input v-model="form.deptName" placeholder="请输入部门名称" />
+        </el-form-item>
+        <el-form-item label="工资所属期" prop="salaryPeriod">
+          <el-input v-model="form.salaryPeriod" placeholder="请输入工资所属期" />
+        </el-form-item>
+        <el-form-item label="基本工资" prop="basicSalary">
+          <el-input v-model="form.basicSalary" placeholder="请输入基本工资" />
+        </el-form-item>
+        <el-form-item label="日工资" prop="basicDailySalary">
+          <el-input v-model="form.basicDailySalary" placeholder="请输入日工资" />
+        </el-form-item>
+        <el-form-item label="工作日" prop="basicWorkDays">
+          <el-input v-model="form.basicWorkDays" placeholder="请输入工作日" />
+        </el-form-item>
+        <el-form-item label="基本工资小计" prop="basicSubtotal">
+          <el-input v-model="form.basicSubtotal" placeholder="请输入基本工资小计" />
+        </el-form-item>
+        <el-form-item label="全勤奖" prop="allowanceFullAttendance">
+          <el-input v-model="form.allowanceFullAttendance" placeholder="请输入全勤奖" />
+        </el-form-item>
+        <el-form-item label="安全奖" prop="allowanceSafety">
+          <el-input v-model="form.allowanceSafety" placeholder="请输入安全奖" />
+        </el-form-item>
+        <el-form-item label="工龄工资" prop="allowanceSeniority">
+          <el-input v-model="form.allowanceSeniority" placeholder="请输入工龄工资" />
+        </el-form-item>
+        <el-form-item label="职务工资" prop="allowancePosition">
+          <el-input v-model="form.allowancePosition" placeholder="请输入职务工资" />
+        </el-form-item>
+        <el-form-item label="浮动工资" prop="allowanceFloating">
+          <el-input v-model="form.allowanceFloating" placeholder="请输入浮动工资" />
+        </el-form-item>
+        <el-form-item label="保密工资" prop="allowanceConfidentiality">
+          <el-input v-model="form.allowanceConfidentiality" placeholder="请输入保密工资" />
+        </el-form-item>
+        <el-form-item label="交通补贴" prop="allowanceTransportation">
+          <el-input v-model="form.allowanceTransportation" placeholder="请输入交通补贴" />
+        </el-form-item>
+        <el-form-item label="特种作业证补贴" prop="allowanceSpecialCertificate">
+          <el-input v-model="form.allowanceSpecialCertificate" placeholder="请输入特种作业证补贴" />
+        </el-form-item>
+        <el-form-item label="节假日补贴" prop="allowanceHoliday">
+          <el-input v-model="form.allowanceHoliday" placeholder="请输入节假日补贴" />
+        </el-form-item>
+        <el-form-item label="工作表现奖" prop="allowancePerformance">
+          <el-input v-model="form.allowancePerformance" placeholder="请输入工作表现奖" />
+        </el-form-item>
+        <el-form-item label="安全培训补贴" prop="allowanceSafetyTraining">
+          <el-input v-model="form.allowanceSafetyTraining" placeholder="请输入安全培训补贴" />
+        </el-form-item>
+        <el-form-item label="绩效考核奖" prop="allowanceAssessment">
+          <el-input v-model="form.allowanceAssessment" placeholder="请输入绩效考核奖" />
+        </el-form-item>
+        <el-form-item label="加班天数" prop="overtimeDays">
+          <el-input v-model="form.overtimeDays" placeholder="请输入加班天数" />
+        </el-form-item>
+        <el-form-item label="加班金额" prop="overtimeAmount">
+          <el-input v-model="form.overtimeAmount" placeholder="请输入加班金额" />
+        </el-form-item>
+        <el-form-item label="中班天数" prop="overtimeMidShiftDays">
+          <el-input v-model="form.overtimeMidShiftDays" placeholder="请输入中班天数" />
+        </el-form-item>
+        <el-form-item label="中班补贴金额" prop="overtimeMidShiftAmount">
+          <el-input v-model="form.overtimeMidShiftAmount" placeholder="请输入中班补贴金额" />
+        </el-form-item>
+        <el-form-item label="夜班天数" prop="overtimeNightShiftDays">
+          <el-input v-model="form.overtimeNightShiftDays" placeholder="请输入夜班天数" />
+        </el-form-item>
+        <el-form-item label="夜班补贴金额" prop="overtimeNightShiftAmount">
+          <el-input v-model="form.overtimeNightShiftAmount" placeholder="请输入夜班补贴金额" />
+        </el-form-item>
+        <el-form-item label="其它应发小计" prop="allowanceSubtotal">
+          <el-input v-model="form.allowanceSubtotal" placeholder="请输入其它应发小计" />
+        </el-form-item>
+        <el-form-item label="应发金额" prop="totalEarnings">
+          <el-input v-model="form.totalEarnings" placeholder="请输入应发金额" />
+        </el-form-item>
+        <el-form-item label="违纪扣款" prop="deductionDiscipline">
+          <el-input v-model="form.deductionDiscipline" placeholder="请输入违纪扣款" />
+        </el-form-item>
+        <el-form-item label="个人所得税" prop="deductionTax">
+          <el-input v-model="form.deductionTax" placeholder="请输入个人所得税" />
+        </el-form-item>
+        <el-form-item label="代扣公积金" prop="deductionHousingFund">
+          <el-input v-model="form.deductionHousingFund" placeholder="请输入代扣公积金" />
+        </el-form-item>
+        <el-form-item label="代扣代缴保险" prop="deductionInsurance">
+          <el-input v-model="form.deductionInsurance" placeholder="请输入代扣代缴保险" />
+        </el-form-item>
+        <el-form-item label="暂扣工资" prop="deductionWithhold">
+          <el-input v-model="form.deductionWithhold" placeholder="请输入暂扣工资" />
+        </el-form-item>
+        <el-form-item label="应扣小计" prop="deductionSubtotal">
+          <el-input v-model="form.deductionSubtotal" placeholder="请输入应扣小计" />
+        </el-form-item>
+        <el-form-item label="实发金额" prop="netSalary">
+          <el-input v-model="form.netSalary" placeholder="请输入实发金额" />
+        </el-form-item>
+        <el-form-item label="备注" prop="remark">
+          <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitForm">确 定</el-button>
+        <el-button @click="cancel">取 消</el-button>
+      </div>
+    </el-dialog>
+  </div>
+</template>
+
+<script>
+import { listDetail, getDetail, delDetail, addDetail, updateDetail } from "@/api/kangderui/detail"
+
+export default {
+  name: "Detail",
+  data() {
+    return {
+      // 遮罩层
+      loading: true,
+      // 选中数组
+      ids: [],
+      // 非单个禁用
+      single: true,
+      // 非多个禁用
+      multiple: true,
+      // 显示搜索条件
+      showSearch: true,
+      // 总条数
+      total: 0,
+      // 员工工资明细表格数据
+      detailList: [],
+      // 弹出层标题
+      title: "",
+      // 是否显示弹出层
+      open: false,
+      // 查询参数
+      queryParams: {
+        pageNum: 1,
+        pageSize: 10,
+        userId: null,
+        nickName: null,
+        bankCardNumber: null,
+        deptId: null,
+        deptName: null,
+        salaryPeriod: null,
+        basicSalary: null,
+        basicDailySalary: null,
+        basicWorkDays: null,
+        basicSubtotal: null,
+        allowanceFullAttendance: null,
+        allowanceSafety: null,
+        allowanceSeniority: null,
+        allowancePosition: null,
+        allowanceFloating: null,
+        allowanceConfidentiality: null,
+        allowanceTransportation: null,
+        allowanceSpecialCertificate: null,
+        allowanceHoliday: null,
+        allowancePerformance: null,
+        allowanceSafetyTraining: null,
+        allowanceAssessment: null,
+        overtimeDays: null,
+        overtimeAmount: null,
+        overtimeMidShiftDays: null,
+        overtimeMidShiftAmount: null,
+        overtimeNightShiftDays: null,
+        overtimeNightShiftAmount: null,
+        allowanceSubtotal: null,
+        totalEarnings: null,
+        deductionDiscipline: null,
+        deductionTax: null,
+        deductionHousingFund: null,
+        deductionInsurance: null,
+        deductionWithhold: null,
+        deductionSubtotal: null,
+        netSalary: null,
+      },
+      // 表单参数
+      form: {},
+      // 表单校验
+      rules: {
+        nickName: [
+          { required: true, message: "姓名不能为空", trigger: "blur" }
+        ],
+        deptId: [
+          { required: true, message: "部门ID不能为空", trigger: "blur" }
+        ],
+      }
+    }
+  },
+  created() {
+    this.getList()
+  },
+  methods: {
+    /** 查询员工工资明细列表 */
+    getList() {
+      this.loading = true
+      listDetail(this.queryParams).then(response => {
+        this.detailList = response.rows
+        this.total = response.total
+        this.loading = false
+      })
+    },
+    // 取消按钮
+    cancel() {
+      this.open = false
+      this.reset()
+    },
+    // 表单重置
+    reset() {
+      this.form = {
+        salaryDetailId: null,
+        userId: null,
+        nickName: null,
+        bankCardNumber: null,
+        deptId: null,
+        deptName: null,
+        salaryPeriod: null,
+        basicSalary: null,
+        basicDailySalary: null,
+        basicWorkDays: null,
+        basicSubtotal: null,
+        allowanceFullAttendance: null,
+        allowanceSafety: null,
+        allowanceSeniority: null,
+        allowancePosition: null,
+        allowanceFloating: null,
+        allowanceConfidentiality: null,
+        allowanceTransportation: null,
+        allowanceSpecialCertificate: null,
+        allowanceHoliday: null,
+        allowancePerformance: null,
+        allowanceSafetyTraining: null,
+        allowanceAssessment: null,
+        overtimeDays: null,
+        overtimeAmount: null,
+        overtimeMidShiftDays: null,
+        overtimeMidShiftAmount: null,
+        overtimeNightShiftDays: null,
+        overtimeNightShiftAmount: null,
+        allowanceSubtotal: null,
+        totalEarnings: null,
+        deductionDiscipline: null,
+        deductionTax: null,
+        deductionHousingFund: null,
+        deductionInsurance: null,
+        deductionWithhold: null,
+        deductionSubtotal: null,
+        netSalary: null,
+        createTime: null,
+        createBy: null,
+        updateBy: null,
+        updateTime: null,
+        remark: null
+      }
+      this.resetForm("form")
+    },
+    /** 搜索按钮操作 */
+    handleQuery() {
+      this.queryParams.pageNum = 1
+      this.getList()
+    },
+    /** 重置按钮操作 */
+    resetQuery() {
+      this.resetForm("queryForm")
+      this.handleQuery()
+    },
+    // 多选框选中数据
+    handleSelectionChange(selection) {
+      this.ids = selection.map(item => item.salaryDetailId)
+      this.single = selection.length!==1
+      this.multiple = !selection.length
+    },
+    /** 新增按钮操作 */
+    handleAdd() {
+      this.reset()
+      this.open = true
+      this.title = "添加员工工资明细"
+    },
+    /** 修改按钮操作 */
+    handleUpdate(row) {
+      this.reset()
+      const salaryDetailId = row.salaryDetailId || this.ids
+      getDetail(salaryDetailId).then(response => {
+        this.form = response.data
+        this.open = true
+        this.title = "修改员工工资明细"
+      })
+    },
+    /** 提交按钮 */
+    submitForm() {
+      this.$refs["form"].validate(valid => {
+        if (valid) {
+          if (this.form.salaryDetailId != null) {
+            updateDetail(this.form).then(response => {
+              this.$modal.msgSuccess("修改成功")
+              this.open = false
+              this.getList()
+            })
+          } else {
+            addDetail(this.form).then(response => {
+              this.$modal.msgSuccess("新增成功")
+              this.open = false
+              this.getList()
+            })
+          }
+        }
+      })
+    },
+    /** 删除按钮操作 */
+    handleDelete(row) {
+      const salaryDetailIds = row.salaryDetailId || this.ids
+      this.$modal.confirm('是否确认删除员工工资明细编号为"' + salaryDetailIds + '"的数据项？').then(function() {
+        return delDetail(salaryDetailIds)
+      }).then(() => {
+        this.getList()
+        this.$modal.msgSuccess("删除成功")
+      }).catch(() => {})
+    },
+    /** 导出按钮操作 */
+    handleExport() {
+      this.download('kangderui/detail/export', {
+        ...this.queryParams
+      }, `detail_${new Date().getTime()}.xlsx`)
+    }
+  }
+}
+</script>
