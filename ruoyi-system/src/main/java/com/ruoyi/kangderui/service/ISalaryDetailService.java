@@ -58,4 +58,13 @@ public interface ISalaryDetailService
      * @return 结果
      */
     public int deleteSalaryDetailBySalaryDetailId(Long salaryDetailId);
+
+    /**
+     * 导入员工工资明细数据
+     *
+     * @param detailList 员工工资明细列表
+     * @param operName 操作用户
+     * @return 结果信息
+     */
+    public String importSalaryDetail(List<SalaryDetail> detailList, String operName);
 }

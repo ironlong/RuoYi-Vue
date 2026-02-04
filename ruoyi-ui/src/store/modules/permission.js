@@ -55,6 +55,12 @@ const permission = {
 // 遍历后台传来的路由字符串，转换为组件对象
 function filterAsyncRouter(asyncRouterMap, lastRouter = false, type = false) {
   return asyncRouterMap.filter(route => {
+    if (!lastRouter && route.component && !route.children && route.component !== 'Layout' && route.component !== 'ParentView' && route.component !== 'InnerLink') {
+      const routeCopy = { ...route }
+      route.component = 'Layout'
+      route.children = [routeCopy]
+      routeCopy.path = ''
+    }
     if (type && route.children) {
       route.children = filterChildren(route.children)
     }

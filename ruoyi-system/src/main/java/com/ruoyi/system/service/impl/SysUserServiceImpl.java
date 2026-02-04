@@ -118,6 +118,18 @@ public class SysUserServiceImpl implements ISysUserService
     }
 
     /**
+     * 通过用户名称查询用户
+     *
+     * @param nickName 用户名称
+     * @return 用户对象信息
+     */
+    @Override
+    public SysUser selectUserByNickName(String nickName)
+    {
+        return userMapper.selectUserByNickName(nickName);
+    }
+
+    /**
      * 通过用户ID查询用户
      * 
      * @param userId 用户ID

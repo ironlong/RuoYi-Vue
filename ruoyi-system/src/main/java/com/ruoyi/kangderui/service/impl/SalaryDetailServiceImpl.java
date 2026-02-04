@@ -2,6 +2,7 @@ package com.ruoyi.kangderui.service.impl;
 
 import java.util.List;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.exception.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.kangderui.mapper.SalaryDetailMapper;
@@ -92,5 +93,48 @@ public class SalaryDetailServiceImpl implements ISalaryDetailService
     public int deleteSalaryDetailBySalaryDetailId(Long salaryDetailId)
     {
         return salaryDetailMapper.deleteSalaryDetailBySalaryDetailId(salaryDetailId);
+    }
+
+    /**
+     * 导入员工工资明细数据
+     *
+     * @param detailList 员工工资明细列表
+     * @param operName 操作用户
+     * @return 结果信息
+     */
+    @Override
+    public String importSalaryDetail(List<SalaryDetail> detailList, String operName)
+    {
+        if (detailList == null || detailList.isEmpty())
+        {
+            throw new ServiceException("导入员工工资明细数据不能为空！");
+        }
+        int successNum = 0;
+        int failureNum = 0;
+        StringBuilder successMsg = new StringBuilder();
+        StringBuilder failureMsg = new StringBuilder();
+        for (SalaryDetail detail : detailList)
+        {
+            try
+            {
+                detail.setCreateBy(operName);
+                insertSalaryDetail(detail);
+                successNum++;
+                successMsg.append("<br/>").append(successNum).append("、姓名 ").append(detail.getNickName()).append(" 导入成功");
+            }
+            catch (Exception e)
+            {
+                failureNum++;
+                String msg = "<br/>" + failureNum + "、姓名 " + detail.getNickName() + " 导入失败：";
+                failureMsg.append(msg).append(e.getMessage());
+            }
+        }
+        if (failureNum > 0)
+        {
+            failureMsg.insert(0, "很抱歉，导入失败！共 " + failureNum + " 条数据格式不正确，错误如下：");
+            throw new ServiceException(failureMsg.toString());
+        }
+        successMsg.insert(0, "恭喜您，数据已全部导入成功！共 " + successNum + " 条，数据如下：");
+        return successMsg.toString();
     }
 }

@@ -42,3 +42,12 @@ export function delDetail(salaryDetailId) {
     method: 'delete'
   })
 }
+
+// 导入员工工资明细
+export function importDetail(data) {
+  return request({
+    url: '/kangderui/detail/importData',
+    method: 'post',
+    data: data
+  })
+}

@@ -1,34 +1,10 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="员工ID" prop="userId">
-        <el-input
-          v-model="queryParams.userId"
-          placeholder="请输入员工ID"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="姓名" prop="nickName">
+      <el-form-item label="员工姓名" prop="nickName">
         <el-input
           v-model="queryParams.nickName"
           placeholder="请输入姓名"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="工资卡号" prop="bankCardNumber">
-        <el-input
-          v-model="queryParams.bankCardNumber"
-          placeholder="请输入工资卡号"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="部门ID" prop="deptId">
-        <el-input
-          v-model="queryParams.deptId"
-          placeholder="请输入部门ID"
           clearable
           @keyup.enter.native="handleQuery"
         />
@@ -45,254 +21,6 @@
         <el-input
           v-model="queryParams.salaryPeriod"
           placeholder="请输入工资所属期"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="基本工资" prop="basicSalary">
-        <el-input
-          v-model="queryParams.basicSalary"
-          placeholder="请输入基本工资"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="日工资" prop="basicDailySalary">
-        <el-input
-          v-model="queryParams.basicDailySalary"
-          placeholder="请输入日工资"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="工作日" prop="basicWorkDays">
-        <el-input
-          v-model="queryParams.basicWorkDays"
-          placeholder="请输入工作日"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="基本工资小计" prop="basicSubtotal">
-        <el-input
-          v-model="queryParams.basicSubtotal"
-          placeholder="请输入基本工资小计"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="全勤奖" prop="allowanceFullAttendance">
-        <el-input
-          v-model="queryParams.allowanceFullAttendance"
-          placeholder="请输入全勤奖"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="安全奖" prop="allowanceSafety">
-        <el-input
-          v-model="queryParams.allowanceSafety"
-          placeholder="请输入安全奖"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="工龄工资" prop="allowanceSeniority">
-        <el-input
-          v-model="queryParams.allowanceSeniority"
-          placeholder="请输入工龄工资"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="职务工资" prop="allowancePosition">
-        <el-input
-          v-model="queryParams.allowancePosition"
-          placeholder="请输入职务工资"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="浮动工资" prop="allowanceFloating">
-        <el-input
-          v-model="queryParams.allowanceFloating"
-          placeholder="请输入浮动工资"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="保密工资" prop="allowanceConfidentiality">
-        <el-input
-          v-model="queryParams.allowanceConfidentiality"
-          placeholder="请输入保密工资"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="交通补贴" prop="allowanceTransportation">
-        <el-input
-          v-model="queryParams.allowanceTransportation"
-          placeholder="请输入交通补贴"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="特种作业证补贴" prop="allowanceSpecialCertificate">
-        <el-input
-          v-model="queryParams.allowanceSpecialCertificate"
-          placeholder="请输入特种作业证补贴"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="节假日补贴" prop="allowanceHoliday">
-        <el-input
-          v-model="queryParams.allowanceHoliday"
-          placeholder="请输入节假日补贴"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="工作表现奖" prop="allowancePerformance">
-        <el-input
-          v-model="queryParams.allowancePerformance"
-          placeholder="请输入工作表现奖"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="安全培训补贴" prop="allowanceSafetyTraining">
-        <el-input
-          v-model="queryParams.allowanceSafetyTraining"
-          placeholder="请输入安全培训补贴"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="绩效考核奖" prop="allowanceAssessment">
-        <el-input
-          v-model="queryParams.allowanceAssessment"
-          placeholder="请输入绩效考核奖"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="加班天数" prop="overtimeDays">
-        <el-input
-          v-model="queryParams.overtimeDays"
-          placeholder="请输入加班天数"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="加班金额" prop="overtimeAmount">
-        <el-input
-          v-model="queryParams.overtimeAmount"
-          placeholder="请输入加班金额"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="中班天数" prop="overtimeMidShiftDays">
-        <el-input
-          v-model="queryParams.overtimeMidShiftDays"
-          placeholder="请输入中班天数"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="中班补贴金额" prop="overtimeMidShiftAmount">
-        <el-input
-          v-model="queryParams.overtimeMidShiftAmount"
-          placeholder="请输入中班补贴金额"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="夜班天数" prop="overtimeNightShiftDays">
-        <el-input
-          v-model="queryParams.overtimeNightShiftDays"
-          placeholder="请输入夜班天数"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="夜班补贴金额" prop="overtimeNightShiftAmount">
-        <el-input
-          v-model="queryParams.overtimeNightShiftAmount"
-          placeholder="请输入夜班补贴金额"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="其它应发小计" prop="allowanceSubtotal">
-        <el-input
-          v-model="queryParams.allowanceSubtotal"
-          placeholder="请输入其它应发小计"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="应发金额" prop="totalEarnings">
-        <el-input
-          v-model="queryParams.totalEarnings"
-          placeholder="请输入应发金额"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="违纪扣款" prop="deductionDiscipline">
-        <el-input
-          v-model="queryParams.deductionDiscipline"
-          placeholder="请输入违纪扣款"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="个人所得税" prop="deductionTax">
-        <el-input
-          v-model="queryParams.deductionTax"
-          placeholder="请输入个人所得税"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="代扣公积金" prop="deductionHousingFund">
-        <el-input
-          v-model="queryParams.deductionHousingFund"
-          placeholder="请输入代扣公积金"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="代扣代缴保险" prop="deductionInsurance">
-        <el-input
-          v-model="queryParams.deductionInsurance"
-          placeholder="请输入代扣代缴保险"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="暂扣工资" prop="deductionWithhold">
-        <el-input
-          v-model="queryParams.deductionWithhold"
-          placeholder="请输入暂扣工资"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="应扣小计" prop="deductionSubtotal">
-        <el-input
-          v-model="queryParams.deductionSubtotal"
-          placeholder="请输入应扣小计"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="实发金额" prop="netSalary">
-        <el-input
-          v-model="queryParams.netSalary"
-          placeholder="请输入实发金额"
           clearable
           @keyup.enter.native="handleQuery"
         />
@@ -345,6 +73,16 @@
           @click="handleExport"
           v-hasPermi="['kangderui:detail:export']"
         >导出</el-button>
+      </el-col>
+      <el-col :span="1.5">
+        <el-button
+          type="info"
+          plain
+          icon="el-icon-upload2"
+          size="mini"
+          @click="handleImport"
+          v-hasPermi="['kangderui:detail:import']"
+        >导入</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
@@ -409,7 +147,7 @@
         </template>
       </el-table-column>
     </el-table>
-    
+
     <pagination
       v-show="total>0"
       :total="total"
@@ -541,11 +279,41 @@
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
+
+    <!-- 员工工资明细导入对话框 -->
+    <el-dialog :title="upload.title" :visible.sync="upload.open" width="400px" append-to-body>
+      <el-upload
+        ref="upload"
+        :limit="1"
+        accept=".xlsx, .xls"
+        :headers="upload.headers"
+        :action="upload.url"
+        :disabled="upload.isUploading"
+        :on-progress="handleFileUploadProgress"
+        :on-success="handleFileSuccess"
+        :auto-upload="false"
+        drag
+      >
+        <i class="el-icon-upload"></i>
+        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+        <div class="el-upload__tip text-center" slot="tip">
+          <div class="el-upload__tip" slot="tip">
+            <span>仅允许导入xls、xlsx格式文件。</span>
+<!--            <el-link type="primary" :underline="false" style="font-size: 12px; vertical-align: baseline" @click="importTemplate">下载模板</el-link>-->
+          </div>
+        </div>
+      </el-upload>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitFileForm">确 定</el-button>
+        <el-button @click="upload.open = false">取 消</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import { listDetail, getDetail, delDetail, addDetail, updateDetail } from "@/api/kangderui/detail"
+import { getToken } from "@/utils/auth"
 
 export default {
   name: "Detail",
@@ -613,6 +381,19 @@ export default {
       },
       // 表单参数
       form: {},
+      // 导入参数
+      upload: {
+        // 是否显示弹出层（导入）
+        open: false,
+        // 弹出层标题（导入）
+        title: "",
+        // 是否禁用上传
+        isUploading: false,
+        // 设置上传的请求头部
+        headers: { Authorization: "Bearer " + getToken() },
+        // 上传的地址
+        url: process.env.VUE_APP_BASE_API + "/kangderui/detail/importData"
+      },
       // 表单校验
       rules: {
         nickName: [
@@ -758,6 +539,37 @@ export default {
       this.download('kangderui/detail/export', {
         ...this.queryParams
       }, `detail_${new Date().getTime()}.xlsx`)
+    },
+    /** 导入按钮操作 */
+    handleImport() {
+      this.upload.title = "员工工资明细导入"
+      this.upload.open = true
+    },
+    /** 下载模板操作 */
+    importTemplate() {
+      this.download('kangderui/detail/importTemplate', {
+      }, `salary_detail_template_${new Date().getTime()}.xlsx`)
+    },
+    // 文件上传中处理
+    handleFileUploadProgress() {
+      this.upload.isUploading = true
+    },
+    // 文件上传成功处理
+    handleFileSuccess(response) {
+      this.upload.open = false
+      this.upload.isUploading = false
+      this.$refs.upload.clearFiles()
+      this.$alert("<div style='overflow: auto;overflow-x: hidden;max-height: 70vh;padding: 10px 20px 0;'>" + response.msg + "</div>", "导入结果", { dangerouslyUseHTMLString: true })
+      this.getList()
+    },
+    // 提交上传文件
+    submitFileForm() {
+      const file = this.$refs.upload.uploadFiles
+      if (!file || file.length === 0 || !file[0].name.toLowerCase().endsWith('.xls') && !file[0].name.toLowerCase().endsWith('.xlsx')) {
+        this.$modal.msgError("请选择后缀为 “xls”或“xlsx”的文件。")
+        return
+      }
+      this.$refs.upload.submit()
     }
   }
 }
