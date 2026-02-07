@@ -89,6 +89,8 @@ public class SysLoginController
         ajax.put("permissions", permissions);
         ajax.put("isDefaultModifyPwd", initPasswordIsModify(user.getPwdUpdateDate()));
         ajax.put("isPasswordExpired", passwordIsExpiration(user.getPwdUpdateDate()));
+        // pwd_update_date 为空时需跳转到个人中心修改密码
+        ajax.put("needRedirectToProfile", user.getPwdUpdateDate() == null);
         return ajax;
     }
 
