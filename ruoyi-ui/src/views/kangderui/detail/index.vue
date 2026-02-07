@@ -187,7 +187,21 @@
           <el-input v-model="form.userId" placeholder="请输入员工ID" />
         </el-form-item>
         <el-form-item label="姓名" prop="nickName">
-          <el-input v-model="form.nickName" placeholder="请输入姓名" />
+          <el-select
+            v-model="form.userId"
+            placeholder="请选择员工"
+            filterable
+            clearable
+            :disabled="isEdit"
+            @change="handleUserChange"
+          >
+            <el-option
+              v-for="item in userOptions"
+              :key="item.userId"
+              :label="item.nickName"
+              :value="item.userId"
+            />
+          </el-select>
         </el-form-item>
         <el-form-item label="工资卡号" prop="bankCardNumber">
           <el-input v-model="form.bankCardNumber" placeholder="请输入工资卡号" />
@@ -195,14 +209,8 @@
         <el-form-item label="部门ID" prop="deptId" v-show="false">
           <el-input v-model="form.deptId" placeholder="请输入部门ID" />
         </el-form-item>
-        <el-form-item label="部门名称" prop="deptId">
-          <treeselect
-            v-model="form.deptId"
-            :options="enabledDeptOptions"
-            :show-count="true"
-            placeholder="请选择部门"
-            @input="handleDeptChange"
-          />
+        <el-form-item label="部门名称" prop="deptName">
+          <el-input v-model="form.deptName" placeholder="自动带出部门" :disabled="true" />
         </el-form-item>
         <el-form-item label="工资所属期" prop="salaryPeriod">
           <el-date-picker
@@ -212,6 +220,7 @@
             format="yyyy年MM月"
             placeholder="请选择工资所属期"
             clearable
+            :disabled="isEdit"
           />
         </el-form-item>
         <div class="form-group-title full-width">基本工资</div>
@@ -356,6 +365,7 @@
 
 <script>
 import { listDetail, getDetail, delDetail, addDetail, updateDetail } from "@/api/kangderui/detail"
+import { listUser } from "@/api/system/user"
 import { deptTreeSelect } from "@/api/system/user"
 import { getToken } from "@/utils/auth"
 import Treeselect from "@riophae/vue-treeselect"
@@ -368,6 +378,9 @@ export default {
     isAdminRole() {
       const roles = this.$store.getters.roles || []
       return roles.includes("admin")
+    },
+    isEdit() {
+      return this.form && this.form.salaryDetailId != null
     }
   },
   data() {
@@ -392,6 +405,8 @@ export default {
       deptOptions: [],
       // 可用部门树选项
       enabledDeptOptions: [],
+      // 员工下拉选项
+      userOptions: [],
       // 是否显示弹出层
       open: false,
       // 查询参数
@@ -622,6 +637,9 @@ export default {
     /** 新增按钮操作 */
     handleAdd() {
       this.reset()
+      const now = new Date()
+      this.form.salaryPeriod = `${now.getFullYear()}年${String(now.getMonth() + 1).padStart(2, "0")}月`
+      this.getUserOptions()
       this.getDeptTree()
       this.open = true
       this.title = "添加员工工资明细"
@@ -632,14 +650,32 @@ export default {
       const salaryDetailId = row.salaryDetailId || this.ids
       getDetail(salaryDetailId).then(response => {
         this.form = response.data
-        this.getDeptTree().then(() => {
-          if (this.form.deptId) {
-            this.form.deptName = this.findDeptLabel(this.enabledDeptOptions, this.form.deptId)
+        this.getUserOptions().then(() => {
+          if (this.form.userId && !this.userOptions.find(item => item.userId === this.form.userId)) {
+            this.userOptions.unshift({ userId: this.form.userId, nickName: this.form.nickName })
           }
         })
         this.open = true
         this.title = "修改员工工资明细"
       })
+    },
+    /** 查询员工下拉列表 */
+    getUserOptions() {
+      return listUser({ pageNum: 1, pageSize: 10000, status: "0" }).then(response => {
+        this.userOptions = (response.rows || []).map(item => ({
+          userId: item.userId,
+          nickName: item.nickName,
+          deptId: item.deptId || (item.dept ? item.dept.deptId : null),
+          deptName: item.dept ? item.dept.deptName : null
+        }))
+      })
+    },
+    handleUserChange(userId) {
+      const selected = this.userOptions.find(item => item.userId === userId)
+      this.form.userId = userId || null
+      this.form.nickName = selected ? selected.nickName : null
+      this.form.deptId = selected ? selected.deptId : null
+      this.form.deptName = selected ? selected.deptName : null
     },
     /** 查询部门下拉树结构 */
     getDeptTree() {
