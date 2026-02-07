@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.system.service.ISysUserService;
+import com.ruoyi.common.exception.ServiceException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.DateUtil;
@@ -61,6 +62,7 @@ public class SalaryDetailController extends BaseController {
     @PreAuthorize("@ss.hasPermi('kangderui:detail:list')")
     @GetMapping("/list")
     public TableDataInfo list(SalaryDetail salaryDetail) {
+        checkPasswordUpdatedForSalaryView();
         applyUserScope(salaryDetail);
         startPage();
         List<SalaryDetail> list = salaryDetailService.selectSalaryDetailList(salaryDetail);
@@ -74,6 +76,7 @@ public class SalaryDetailController extends BaseController {
     @Log(title = "员工工资明细", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, SalaryDetail salaryDetail) {
+        checkPasswordUpdatedForSalaryView();
         applyUserScope(salaryDetail);
         List<SalaryDetail> list = salaryDetailService.selectSalaryDetailList(salaryDetail);
         ExcelUtil<SalaryDetail> util = new ExcelUtil<SalaryDetail>(SalaryDetail.class);
@@ -111,6 +114,7 @@ public class SalaryDetailController extends BaseController {
     @PreAuthorize("@ss.hasPermi('kangderui:detail:query')")
     @GetMapping(value = "/{salaryDetailId}")
     public AjaxResult getInfo(@PathVariable("salaryDetailId") Long salaryDetailId) {
+        checkPasswordUpdatedForSalaryView();
         SalaryDetail detail = salaryDetailService.selectSalaryDetailBySalaryDetailId(salaryDetailId);
         if (detail == null) {
             return error("数据不存在");
@@ -200,6 +204,17 @@ public class SalaryDetailController extends BaseController {
         }
         if (!isAdminUser()) {
             salaryDetail.setUserId(getUserId());
+        }
+    }
+
+    private void checkPasswordUpdatedForSalaryView() {
+        if (isAdminUser()) {
+            return;
+        }
+        LoginUser loginUser = getLoginUser();
+        SysUser user = loginUser != null ? loginUser.getUser() : null;
+        if (user == null || user.getPwdUpdateDate() == null) {
+            throw new ServiceException("请先修改初始密码后再查看工资");
         }
     }
 
