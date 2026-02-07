@@ -528,7 +528,18 @@ export default {
         this.detailList = response.rows
         this.total = response.total
         this.loading = false
+      }).catch(error => {
+        this.loading = false
+        this.handlePasswordRedirect(error)
       })
+    },
+    handlePasswordRedirect(error) {
+      const message = error && error.message ? error.message : error
+      if (message === "请先修改初始密码后再查看工资") {
+        this.$router.push({ name: "Profile", params: { activeTab: "resetPwd" } })
+        return true
+      }
+      return false
     },
     // 取消按钮
     cancel() {
@@ -727,6 +738,8 @@ export default {
         })
         this.open = true
         this.title = "修改员工工资明细"
+      }).catch(error => {
+        this.handlePasswordRedirect(error)
       })
     },
     /** 查询员工下拉列表 */
