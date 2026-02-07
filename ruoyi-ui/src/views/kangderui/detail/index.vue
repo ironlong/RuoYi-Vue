@@ -2,20 +2,46 @@
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="员工姓名" prop="nickName">
-        <el-input
+        <el-select
           v-model="queryParams.nickName"
-          placeholder="请输入姓名"
+          filterable
+          remote
           clearable
-          @keyup.enter.native="handleQuery"
-        />
+          reserve-keyword
+          placeholder="请输入姓名"
+          :remote-method="queryUserOptions"
+          :loading="userSearchLoading"
+          @change="handleQuery"
+          @clear="clearUserSearch"
+        >
+          <el-option
+            v-for="item in userSearchOptions"
+            :key="item.userId"
+            :label="item.nickName"
+            :value="item.nickName"
+          />
+        </el-select>
       </el-form-item>
       <el-form-item label="部门名称" prop="deptName">
-        <el-input
+        <el-select
           v-model="queryParams.deptName"
-          placeholder="请输入部门名称"
+          filterable
+          remote
           clearable
-          @keyup.enter.native="handleQuery"
-        />
+          reserve-keyword
+          placeholder="请输入部门名称"
+          :remote-method="queryDeptOptions"
+          :loading="deptSearchLoading"
+          @change="handleQuery"
+          @clear="clearDeptSearch"
+        >
+          <el-option
+            v-for="item in deptSearchOptions"
+            :key="item.deptId"
+            :label="item.deptName"
+            :value="item.deptName"
+          />
+        </el-select>
       </el-form-item>
       <el-form-item label="工资所属期" prop="salaryPeriod">
         <el-date-picker
@@ -210,7 +236,7 @@
           <el-input v-model="form.deptId" placeholder="请输入部门ID" />
         </el-form-item>
         <el-form-item label="部门名称" prop="deptName">
-          <el-input v-model="form.deptName" placeholder="自动带出部门" :disabled="true" />
+          <el-input v-model="form.deptName" placeholder="" :disabled="true" />
         </el-form-item>
         <el-form-item label="工资所属期" prop="salaryPeriod">
           <el-date-picker
@@ -366,6 +392,7 @@
 <script>
 import { listDetail, getDetail, delDetail, addDetail, updateDetail } from "@/api/kangderui/detail"
 import { listUser } from "@/api/system/user"
+import { listDept } from "@/api/system/dept"
 import { deptTreeSelect } from "@/api/system/user"
 import { getToken } from "@/utils/auth"
 import Treeselect from "@riophae/vue-treeselect"
@@ -407,6 +434,11 @@ export default {
       enabledDeptOptions: [],
       // 员工下拉选项
       userOptions: [],
+      // 搜索下拉选项
+      userSearchOptions: [],
+      deptSearchOptions: [],
+      userSearchLoading: false,
+      deptSearchLoading: false,
       // 是否显示弹出层
       open: false,
       // 查询参数
@@ -622,6 +654,44 @@ export default {
     handleQuery() {
       this.queryParams.pageNum = 1
       this.getList()
+    },
+    queryUserOptions(query) {
+      if (!query) {
+        this.userSearchOptions = []
+        return
+      }
+      this.userSearchLoading = true
+      listUser({ pageNum: 1, pageSize: 20, nickName: query, status: "0" }).then(response => {
+        this.userSearchOptions = (response.rows || []).map(item => ({
+          userId: item.userId,
+          nickName: item.nickName
+        }))
+        this.userSearchLoading = false
+      }).catch(() => {
+        this.userSearchLoading = false
+      })
+    },
+    clearUserSearch() {
+      this.userSearchOptions = []
+    },
+    queryDeptOptions(query) {
+      if (!query) {
+        this.deptSearchOptions = []
+        return
+      }
+      this.deptSearchLoading = true
+      listDept({ deptName: query }).then(response => {
+        this.deptSearchOptions = (response.data || []).map(item => ({
+          deptId: item.deptId,
+          deptName: item.deptName
+        }))
+        this.deptSearchLoading = false
+      }).catch(() => {
+        this.deptSearchLoading = false
+      })
+    },
+    clearDeptSearch() {
+      this.deptSearchOptions = []
     },
     /** 重置按钮操作 */
     resetQuery() {
