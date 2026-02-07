@@ -1,6 +1,5 @@
 package com.ruoyi.web.controller.kangderui;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -28,7 +27,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
@@ -39,6 +37,7 @@ import com.ruoyi.kangderui.domain.SalaryDetail;
 import com.ruoyi.kangderui.service.ISalaryDetailService;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.common.core.page.TableDataInfo;
+import com.ruoyi.common.core.domain.model.LoginUser;
 
 /**
  * 员工工资明细Controller
@@ -62,6 +61,7 @@ public class SalaryDetailController extends BaseController {
     @PreAuthorize("@ss.hasPermi('kangderui:detail:list')")
     @GetMapping("/list")
     public TableDataInfo list(SalaryDetail salaryDetail) {
+        applyUserScope(salaryDetail);
         startPage();
         List<SalaryDetail> list = salaryDetailService.selectSalaryDetailList(salaryDetail);
         return getDataTable(list);
@@ -74,6 +74,7 @@ public class SalaryDetailController extends BaseController {
     @Log(title = "员工工资明细", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, SalaryDetail salaryDetail) {
+        applyUserScope(salaryDetail);
         List<SalaryDetail> list = salaryDetailService.selectSalaryDetailList(salaryDetail);
         ExcelUtil<SalaryDetail> util = new ExcelUtil<SalaryDetail>(SalaryDetail.class);
         util.exportExcel(response, list, "员工工资明细数据");
@@ -110,7 +111,14 @@ public class SalaryDetailController extends BaseController {
     @PreAuthorize("@ss.hasPermi('kangderui:detail:query')")
     @GetMapping(value = "/{salaryDetailId}")
     public AjaxResult getInfo(@PathVariable("salaryDetailId") Long salaryDetailId) {
-        return success(salaryDetailService.selectSalaryDetailBySalaryDetailId(salaryDetailId));
+        SalaryDetail detail = salaryDetailService.selectSalaryDetailBySalaryDetailId(salaryDetailId);
+        if (detail == null) {
+            return error("数据不存在");
+        }
+        if (!isAdminUser() && detail.getUserId() != null && !detail.getUserId().equals(getUserId())) {
+            return error("没有权限查看该工资明细");
+        }
+        return success(detail);
     }
 
     /**
@@ -120,6 +128,9 @@ public class SalaryDetailController extends BaseController {
     @Log(title = "员工工资明细", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody SalaryDetail salaryDetail) {
+        if (!isAdminUser()) {
+            salaryDetail.setUserId(getUserId());
+        }
         return toAjax(salaryDetailService.insertSalaryDetail(salaryDetail));
     }
 
@@ -130,6 +141,9 @@ public class SalaryDetailController extends BaseController {
     @Log(title = "员工工资明细", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody SalaryDetail salaryDetail) {
+        if (!isAdminUser()) {
+            return error("没有权限修改工资明细");
+        }
         return toAjax(salaryDetailService.updateSalaryDetail(salaryDetail));
     }
 
@@ -178,6 +192,20 @@ public class SalaryDetailController extends BaseController {
             }
         }
         return rows;
+    }
+
+    private void applyUserScope(SalaryDetail salaryDetail) {
+        if (salaryDetail == null) {
+            return;
+        }
+        if (!isAdminUser()) {
+            salaryDetail.setUserId(getUserId());
+        }
+    }
+
+    private boolean isAdminUser() {
+        LoginUser loginUser = getLoginUser();
+        return loginUser != null && loginUser.getUser() != null && loginUser.getUser().isAdmin();
     }
 
     private boolean isRowEmpty(Row row) {
