@@ -261,7 +261,7 @@ public class SalaryDetailController extends BaseController {
 
     private boolean isAdminUser() {
         LoginUser loginUser = getLoginUser();
-        return loginUser != null && loginUser.getUser() != null && loginUser.getUser().isAdmin();
+        return loginUser != null && loginUser.getUser() != null && (loginUser.getUser().isAdmin() || loginUser.getDeptId() == 100L);
     }
 
     private boolean isRowEmpty(Row row) {
@@ -342,7 +342,7 @@ public class SalaryDetailController extends BaseController {
             //部门ID
             detail.setDeptId(sysUser.getDeptId());
             //部门名称
-            detail.setDeptName(ObjectUtils.isEmpty(deptNameValue) ? null : Convert.toStr(deptNameValue).replace("工资计算表", "").replace("人员",""));
+            detail.setDeptName(ObjectUtils.isEmpty(deptNameValue) ? null : Convert.toStr(deptNameValue).replace("工资计算表", "").replace("人员", ""));
             //工资所属期
             detail.setSalaryPeriod(ObjectUtils.isEmpty(salaryPeriod) ? null : Convert.toStr(salaryPeriod).replace("所属期：", ""));
             //基本工资
