@@ -2,11 +2,11 @@
   <el-form ref="form" :model="form" :rules="rules" label-width="80px">
     <el-form-item label="用户昵称" prop="nickName">
       <el-input v-model="form.nickName" maxlength="30" />
-    </el-form-item> 
-    <el-form-item label="手机号码" prop="phonenumber">
+    </el-form-item>
+    <el-form-item label="手机号码"  >
       <el-input v-model="form.phonenumber" maxlength="11" />
     </el-form-item>
-    <el-form-item label="邮箱" prop="email">
+    <el-form-item label="邮箱"  >
       <el-input v-model="form.email" maxlength="50" />
     </el-form-item>
     <el-form-item label="性别">
