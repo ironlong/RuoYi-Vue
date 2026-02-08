@@ -409,7 +409,8 @@ export default {
   computed: {
     isAdminRole() {
       const roles = this.$store.getters.roles || []
-      return roles.includes("admin")
+      const deptId = this.$store.getters.deptId
+      return roles.includes("admin") || String(deptId) === "100" || String(deptId) === "109"
     },
     isEdit() {
       return this.form && this.form.salaryDetailId != null

@@ -95,6 +95,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="deductionSubtotal != null "> and deduction_subtotal = #{deductionSubtotal}</if>
             <if test="netSalary != null "> and net_salary = #{netSalary}</if>
         </where>
+        order by (case when remark = '1' then 1 else 0 end) asc, salary_detail_id desc
     </select>
     
     <select id="selectSalaryDetailBySalaryDetailId" parameterType="Long" resultMap="SalaryDetailResult">

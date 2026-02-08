@@ -261,7 +261,14 @@ public class SalaryDetailController extends BaseController {
 
     private boolean isAdminUser() {
         LoginUser loginUser = getLoginUser();
-        return loginUser != null && loginUser.getUser() != null && (loginUser.getUser().isAdmin() || loginUser.getDeptId() == 100L|| loginUser.getDeptId() == 109L);
+        if (loginUser == null || loginUser.getUser() == null) {
+            return false;
+        }
+        if (loginUser.getUser().isAdmin()) {
+            return true;
+        }
+        Long deptId = loginUser.getUser().getDeptId();
+        return deptId != null && (deptId == 100L || deptId == 109L);
     }
 
     private boolean isRowEmpty(Row row) {

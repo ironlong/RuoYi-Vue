@@ -9,6 +9,7 @@ const user = {
   state: {
     token: getToken(),
     id: '',
+    deptId: '',
     name: '',
     nickName: '',
     avatar: '',
@@ -22,6 +23,9 @@ const user = {
     },
     SET_ID: (state, id) => {
       state.id = id
+    },
+    SET_DEPT_ID: (state, deptId) => {
+      state.deptId = deptId
     },
     SET_NAME: (state, name) => {
       state.name = name
@@ -74,6 +78,7 @@ const user = {
             commit('SET_ROLES', ['ROLE_DEFAULT'])
           }
           commit('SET_ID', user.userId)
+          commit('SET_DEPT_ID', user.deptId)
           commit('SET_NAME', user.userName)
           commit('SET_NICK_NAME', user.nickName)
           commit('SET_AVATAR', avatar)
