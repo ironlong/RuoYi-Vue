@@ -133,6 +133,11 @@
         <el-table-column label="部门ID" align="center" prop="deptId" v-if=false />
         <el-table-column label="部门名称" align="center" prop="deptName" fixed="left" width="140" show-overflow-tooltip />
         <el-table-column label="工资所属期" align="center" prop="salaryPeriod" fixed="left" width="110" />
+        <el-table-column label="确认状态" align="center" min-width="100">
+          <template slot-scope="scope">
+            <span>{{ isConfirmed(scope.row) ? "已确认" : "未确认" }}</span>
+          </template>
+        </el-table-column>
       </el-table-column>
       <el-table-column label="基本工资" align="center">
         <el-table-column label="基本工资" align="center" prop="basicSalary" />
