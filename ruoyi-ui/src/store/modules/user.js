@@ -84,14 +84,14 @@ const user = {
           commit('SET_AVATAR', avatar)
           /* 初始密码提示 */
           if(res.isDefaultModifyPwd) {
-            MessageBox.confirm('您的密码还是初始密码，请修改密码！',  '安全提示', {  confirmButtonText: '确定',  cancelButtonText: '取消',  type: 'warning' }).then(() => {
+            MessageBox.confirm('您的密码还是初始密码，请修改密码！',  '安全提示', {  confirmButtonText: '确定',  cancelButtonText: '取消',  type: 'warning', center: true, customClass: 'global-confirm-messagebox' }).then(() => {
               router.push({ name: 'Profile', params: { activeTab: 'resetPwd' } })
             }).catch(() => {})
           }
           /* pwd_update_date 为空时由 permission.js 自动跳转到 /user/profile */
           /* 过期密码提示 */
           if(!res.isDefaultModifyPwd && res.isPasswordExpired) {
-            MessageBox.confirm('您的密码已过期，请尽快修改密码！',  '安全提示', {  confirmButtonText: '确定',  cancelButtonText: '取消',  type: 'warning' }).then(() => {
+            MessageBox.confirm('您的密码已过期，请尽快修改密码！',  '安全提示', {  confirmButtonText: '确定',  cancelButtonText: '取消',  type: 'warning', center: true, customClass: 'global-confirm-messagebox' }).then(() => {
               router.push({ name: 'Profile', params: { activeTab: 'resetPwd' } })
             }).catch(() => {})
           }

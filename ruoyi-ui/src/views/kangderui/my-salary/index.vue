@@ -147,10 +147,7 @@ export default {
     },
     handleConfirm(row) {
       const salaryDetailId = row.salaryDetailId
-      this.$modal.confirm("确认工资无误后将无法撤销，是否继续？", {
-        center: true,
-        customClass: "salary-confirm-messagebox"
-      }).then(() => {
+      this.$modal.confirm("确认工资无误后将无法撤销，是否继续？").then(() => {
         return confirmDetail(salaryDetailId)
       }).then(() => {
         this.$modal.msgSuccess("确认成功")
