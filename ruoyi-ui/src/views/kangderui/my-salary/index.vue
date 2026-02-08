@@ -78,16 +78,15 @@
         <el-table-column label="应发金额" align="center" prop="totalEarnings" min-width="100" />
         <el-table-column label="实发金额" align="center" prop="netSalary" min-width="100" />
       </el-table-column>
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" fixed="right" width="120">
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" fixed="right" width="80">
         <template slot-scope="scope">
           <el-button
             v-if="!isConfirmed(scope.row)"
-            size="mini"
-            type="text"
-            icon="el-icon-check"
+            size="small"
+            type="primary"
             @click="handleConfirm(scope.row)"
             v-hasPermi="['kangderui:detail:confirm']"
-          >确认</el-button>
+            >确认</el-button>
         </template>
       </el-table-column>
     </el-table>
