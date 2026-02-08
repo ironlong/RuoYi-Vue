@@ -43,7 +43,7 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="工资所属期" prop="salaryPeriod">
+      <el-form-item label="工资所属期" prop="salaryPeriod" label-width="110px">
         <el-date-picker
           v-model="queryParams.salaryPeriod"
           type="month"
@@ -129,7 +129,7 @@
         <el-table-column label="主键ID" align="center" prop="salaryDetailId" v-if=false />
         <el-table-column label="员工ID" align="center" prop="userId" v-if=false />
         <el-table-column label="姓名" align="center" prop="nickName" fixed="left" width="100" />
-        <el-table-column label="工资卡号" align="center" prop="bankCardNumber" fixed="left" width="160" show-overflow-tooltip />
+<!--        <el-table-column label="工资卡号" align="center" prop="bankCardNumber" fixed="left" width="160" show-overflow-tooltip />-->
         <el-table-column label="部门ID" align="center" prop="deptId" v-if=false />
         <el-table-column label="部门名称" align="center" prop="deptName" fixed="left" width="140" show-overflow-tooltip />
         <el-table-column label="工资所属期" align="center" prop="salaryPeriod" fixed="left" width="110" />
@@ -229,9 +229,9 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="工资卡号" prop="bankCardNumber">
-          <el-input v-model="form.bankCardNumber" placeholder="请输入工资卡号" />
-        </el-form-item>
+<!--        <el-form-item label="工资卡号" prop="bankCardNumber">-->
+<!--          <el-input v-model="form.bankCardNumber" placeholder="请输入工资卡号" />-->
+<!--        </el-form-item>-->
         <el-form-item label="部门ID" prop="deptId" v-show="false">
           <el-input v-model="form.deptId" placeholder="请输入部门ID" />
         </el-form-item>
@@ -259,7 +259,7 @@
         <el-form-item label="工作日" prop="basicWorkDays">
           <el-input v-model="form.basicWorkDays" placeholder="请输入工作日" />
         </el-form-item>
-        <el-form-item label="基本工资小计" prop="basicSubtotal">
+        <el-form-item label="基本工资小计" prop="basicSubtotal" label-width="110px">
           <el-input v-model="form.basicSubtotal" placeholder="请输入基本工资小计" :disabled="true" />
         </el-form-item>
         <div class="form-group-title full-width">补贴奖金</div>
@@ -284,7 +284,7 @@
         <el-form-item label="交通补贴" prop="allowanceTransportation">
           <el-input v-model="form.allowanceTransportation" placeholder="请输入交通补贴" />
         </el-form-item>
-        <el-form-item label="特种作业证补贴" prop="allowanceSpecialCertificate">
+        <el-form-item label="特种作业证补贴" prop="allowanceSpecialCertificate" label-width="110px">
           <el-input v-model="form.allowanceSpecialCertificate" placeholder="请输入特种作业证补贴" />
         </el-form-item>
         <el-form-item label="节假日补贴" prop="allowanceHoliday">
@@ -293,7 +293,7 @@
         <el-form-item label="工作表现奖" prop="allowancePerformance">
           <el-input v-model="form.allowancePerformance" placeholder="请输入工作表现奖" />
         </el-form-item>
-        <el-form-item label="安全培训补贴" prop="allowanceSafetyTraining">
+        <el-form-item label="安全培训补贴" prop="allowanceSafetyTraining" label-width="110px">
           <el-input v-model="form.allowanceSafetyTraining" placeholder="请输入安全培训补贴" />
         </el-form-item>
         <el-form-item label="绩效考核奖" prop="allowanceAssessment">
@@ -309,17 +309,17 @@
         <el-form-item label="中班天数" prop="overtimeMidShiftDays">
           <el-input v-model="form.overtimeMidShiftDays" placeholder="请输入中班天数" />
         </el-form-item>
-        <el-form-item label="中班补贴金额" prop="overtimeMidShiftAmount">
+        <el-form-item label="中班补贴金额" prop="overtimeMidShiftAmount" label-width="110px">
           <el-input v-model="form.overtimeMidShiftAmount" placeholder="请输入中班补贴金额" />
         </el-form-item>
         <el-form-item label="夜班天数" prop="overtimeNightShiftDays">
           <el-input v-model="form.overtimeNightShiftDays" placeholder="请输入夜班天数" />
         </el-form-item>
-        <el-form-item label="夜班补贴金额" prop="overtimeNightShiftAmount">
+        <el-form-item label="夜班补贴金额" prop="overtimeNightShiftAmount" label-width="110px">
           <el-input v-model="form.overtimeNightShiftAmount" placeholder="请输入夜班补贴金额" />
         </el-form-item>
         <div class="form-group-title full-width">应发汇总</div>
-        <el-form-item label="其它应发小计" prop="allowanceSubtotal">
+        <el-form-item label="其它应发小计" prop="allowanceSubtotal" label-width="110px">
           <el-input v-model="form.allowanceSubtotal" placeholder="请输入其它应发小计" :disabled="true" />
         </el-form-item>
         <el-form-item label="应发金额" prop="totalEarnings">
@@ -335,7 +335,7 @@
         <el-form-item label="代扣公积金" prop="deductionHousingFund">
           <el-input v-model="form.deductionHousingFund" placeholder="请输入代扣公积金" />
         </el-form-item>
-        <el-form-item label="代扣代缴保险" prop="deductionInsurance">
+        <el-form-item label="代扣代缴保险" prop="deductionInsurance" label-width="110px">
           <el-input v-model="form.deductionInsurance" placeholder="请输入代扣代缴保险" />
         </el-form-item>
         <el-form-item label="暂扣工资" prop="deductionWithhold">
