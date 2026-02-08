@@ -77,6 +77,11 @@
   word-break: break-word;
 }
 
+.salary-confirm-messagebox {
+  width: 90vw;
+  max-width: 420px;
+}
+
 .el-dialog:not(.is-fullscreen) {
   margin-top: 6vh !important;
 }

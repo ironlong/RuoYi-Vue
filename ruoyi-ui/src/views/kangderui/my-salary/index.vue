@@ -29,7 +29,7 @@
         <el-table-column label="主键ID" align="center" prop="salaryDetailId" v-if="false" />
         <el-table-column label="员工ID" align="center" prop="userId" v-if="false" />
         <el-table-column label="姓名" align="center" prop="nickName" fixed="left" width="100" />
-        <el-table-column label="部门名称" align="center" prop="deptName" fixed="left" width="140" show-overflow-tooltip />
+<!--        <el-table-column label="部门名称" align="center" prop="deptName" fixed="left" width="140" show-overflow-tooltip />-->
         <el-table-column label="工资所属期" align="center" prop="salaryPeriod" fixed="left" width="110" />
         <el-table-column label="确认状态" align="center" min-width="100">
           <template slot-scope="scope">
@@ -147,7 +147,10 @@ export default {
     },
     handleConfirm(row) {
       const salaryDetailId = row.salaryDetailId
-      this.$modal.confirm("确认工资无误后将无法撤销，是否继续？").then(() => {
+      this.$modal.confirm("确认工资无误后将无法撤销，是否继续？", {
+        center: true,
+        customClass: "salary-confirm-messagebox"
+      }).then(() => {
         return confirmDetail(salaryDetailId)
       }).then(() => {
         this.$modal.msgSuccess("确认成功")

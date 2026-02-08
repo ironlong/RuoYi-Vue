@@ -42,6 +42,11 @@ router.beforeEach((to, from, next) => {
           store.dispatch('GenerateRoutes').then(accessRoutes => {
             // 根据roles权限生成可访问的路由表
             router.addRoutes(accessRoutes) // 动态添加可访问路由表
+              const firstPath = getFirstAvailablePath(store.getters.sidebarRouters || [])
+              if (firstPath && firstPath !== to.path) {
+                next({ path: firstPath, replace: true })
+                return
+              }
             next({ ...to, replace: true }) // hack方法 确保addRoutes已完成
           })
         }).catch(err => {
@@ -69,3 +74,34 @@ router.beforeEach((to, from, next) => {
 router.afterEach(() => {
   NProgress.done()
 })
+
+
+function normalizePath(basePath, path) {
+  if (!path) {
+    return basePath || '/'
+  }
+  if (path.startsWith('/')) {
+    return path
+  }
+  const base = basePath && basePath !== '/' ? basePath : ''
+  return `${base}/${path}`.replace(/\/+/g, '/')
+}
+
+function getFirstAvailablePath(routes, basePath = '') {
+  for (const route of routes) {
+    if (route.hidden) {
+      continue
+    }
+    const currentPath = normalizePath(basePath, route.path || '')
+    if (route.children && route.children.length) {
+      const childPath = getFirstAvailablePath(route.children, currentPath)
+      if (childPath) {
+        return childPath
+      }
+    }
+    if (route.component && route.component !== 'Layout') {
+      return currentPath
+    }
+  }
+  return ''
+}
