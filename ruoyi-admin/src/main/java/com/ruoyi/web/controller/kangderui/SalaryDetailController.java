@@ -70,6 +70,22 @@ public class SalaryDetailController extends BaseController {
     }
 
     /**
+     * 查询我的工资明细列表
+     */
+    @PreAuthorize("@ss.hasPermi('kangderui:detail:my')")
+    @GetMapping("/my/list")
+    public TableDataInfo myList(SalaryDetail salaryDetail) {
+        checkPasswordUpdatedForSalaryView();
+        if (salaryDetail == null) {
+            salaryDetail = new SalaryDetail();
+        }
+        salaryDetail.setUserId(getUserId());
+        startPage();
+        List<SalaryDetail> list = salaryDetailService.selectSalaryDetailList(salaryDetail);
+        return getDataTable(list);
+    }
+
+    /**
      * 导出员工工资明细列表
      */
     @PreAuthorize("@ss.hasPermi('kangderui:detail:export')")
@@ -149,6 +165,31 @@ public class SalaryDetailController extends BaseController {
             return error("没有权限修改工资明细");
         }
         return toAjax(salaryDetailService.updateSalaryDetail(salaryDetail));
+    }
+
+    /**
+     * 员工确认工资无误
+     */
+    @PreAuthorize("@ss.hasPermi('kangderui:detail:confirm')")
+    @Log(title = "员工工资确认", businessType = BusinessType.UPDATE)
+    @PutMapping("/confirm/{salaryDetailId}")
+    public AjaxResult confirm(@PathVariable("salaryDetailId") Long salaryDetailId) {
+        checkPasswordUpdatedForSalaryView();
+        SalaryDetail detail = salaryDetailService.selectSalaryDetailBySalaryDetailId(salaryDetailId);
+        if (detail == null) {
+            return error("数据不存在");
+        }
+        if (!isAdminUser() && detail.getUserId() != null && !detail.getUserId().equals(getUserId())) {
+            return error("没有权限确认该工资");
+        }
+        if (StringUtils.equals("1", detail.getRemark())) {
+            return success("已确认");
+        }
+        SalaryDetail update = new SalaryDetail();
+        update.setSalaryDetailId(salaryDetailId);
+        update.setRemark("1");
+        update.setUpdateBy(getUsername());
+        return toAjax(salaryDetailService.updateSalaryDetail(update));
     }
 
     /**
@@ -301,7 +342,7 @@ public class SalaryDetailController extends BaseController {
             //部门ID
             detail.setDeptId(sysUser.getDeptId());
             //部门名称
-            detail.setDeptName(ObjectUtils.isEmpty(deptNameValue) ? null : Convert.toStr(deptNameValue).replace("工资计算表", "").replace("（一）", "（二）"));
+            detail.setDeptName(ObjectUtils.isEmpty(deptNameValue) ? null : Convert.toStr(deptNameValue).replace("工资计算表", "").replace("人员",""));
             //工资所属期
             detail.setSalaryPeriod(ObjectUtils.isEmpty(salaryPeriod) ? null : Convert.toStr(salaryPeriod).replace("所属期：", ""));
             //基本工资

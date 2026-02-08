@@ -9,6 +9,15 @@ export function listDetail(query) {
   })
 }
 
+// 查询我的工资明细列表
+export function listMyDetail(query) {
+  return request({
+    url: '/kangderui/detail/my/list',
+    method: 'get',
+    params: query
+  })
+}
+
 // 查询员工工资明细详细
 export function getDetail(salaryDetailId) {
   return request({
@@ -40,6 +49,14 @@ export function delDetail(salaryDetailId) {
   return request({
     url: '/kangderui/detail/' + salaryDetailId,
     method: 'delete'
+  })
+}
+
+// 员工确认工资无误
+export function confirmDetail(salaryDetailId) {
+  return request({
+    url: '/kangderui/detail/confirm/' + salaryDetailId,
+    method: 'put'
   })
 }
 

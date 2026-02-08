@@ -521,6 +521,9 @@ export default {
     this.getList()
   },
   methods: {
+    isConfirmed(row) {
+      return row && String(row.remark) === "1"
+    },
     /** 查询员工工资明细列表 */
     getList() {
       this.loading = true
@@ -729,6 +732,10 @@ export default {
     handleUpdate(row) {
       this.reset()
       const salaryDetailId = row.salaryDetailId || this.ids
+      if (!this.isAdminRole && this.isConfirmed(row)) {
+        this.$modal.msgError("该工资已确认，不能修改。")
+        return
+      }
       getDetail(salaryDetailId).then(response => {
         this.form = response.data
         this.getUserOptions().then(() => {
@@ -802,6 +809,10 @@ export default {
     },
     /** 提交按钮 */
     submitForm() {
+      if (!this.isAdminRole && this.isConfirmed(this.form)) {
+        this.$modal.msgError("该工资已确认，不能修改。")
+        return
+      }
       this.$refs["form"].validate(valid => {
         if (valid) {
           if (this.form.salaryDetailId != null) {

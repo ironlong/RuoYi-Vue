@@ -702,3 +702,15 @@ create table gen_table_column (
   update_time       datetime                                   comment '更新时间',
   primary key (column_id)
 ) engine=innodb auto_increment=1 comment = '代码生成业务表字段';
+
+-- ----------------------------
+-- 20、工资管理菜单与权限
+-- ----------------------------
+insert into sys_menu values('2100', '工资管理', '0', '6', 'salary',        null, '', '', 1, 0, 'M', '0', '0', '',                      'money', 'admin', sysdate(), '', null, '工资管理目录');
+insert into sys_menu values('2101', '我的工资', '2100', '1', 'my-salary',  'kangderui/my-salary/index', '', '', 1, 0, 'C', '0', '0', 'kangderui:detail:my', 'money', 'admin', sysdate(), '', null, '我的工资菜单');
+insert into sys_menu values('2102', '工资确认', '2101', '1', '',          '', '', '', 1, 0, 'F', '0', '0', 'kangderui:detail:confirm', '#', 'admin', sysdate(), '', null, '工资确认按钮');
+
+-- 默认赋权给普通角色（可按需调整）
+insert into sys_role_menu values ('2', '2100');
+insert into sys_role_menu values ('2', '2101');
+insert into sys_role_menu values ('2', '2102');
