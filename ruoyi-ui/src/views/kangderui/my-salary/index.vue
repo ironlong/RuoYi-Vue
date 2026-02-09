@@ -11,11 +11,180 @@
           clearable
         />
       </el-form-item>
-      <el-form-item>
+      <el-form-item class="search-actions">
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
       </el-form-item>
     </el-form>
+
+    <div class="salary-cards">
+      <div v-for="(row, index) in detailList" :key="row.salaryDetailId || index" class="salary-card">
+        <div class="card-header">
+          <div class="title">{{ row.nickName }} - {{ row.salaryPeriod }}</div>
+          <el-tag size="mini" :type="isConfirmed(row) ? 'success' : 'warning'">
+            {{ isConfirmed(row) ? "已确认" : "未确认" }}
+          </el-tag>
+        </div>
+        <div class="card-section">
+          <div class="section-title">汇总</div>
+          <div class="kv">
+            <div class="kv-item">
+              <span class="label">应发金额</span>
+              <span class="value">{{ row.totalEarnings }}</span>
+            </div>
+            <div class="kv-item">
+              <span class="label">实发金额</span>
+              <span class="value">{{ row.netSalary }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="card-section">
+          <div class="section-title">基本工资</div>
+          <div class="kv">
+            <div class="kv-item">
+              <span class="label">基本工资</span>
+              <span class="value">{{ row.basicSalary }}</span>
+            </div>
+            <div class="kv-item">
+              <span class="label">日工资</span>
+              <span class="value">{{ row.basicDailySalary }}</span>
+            </div>
+            <div class="kv-item">
+              <span class="label">工作日</span>
+              <span class="value">{{ row.basicWorkDays }}</span>
+            </div>
+            <div class="kv-item">
+              <span class="label">小计</span>
+              <span class="value">{{ row.basicSubtotal }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="card-section">
+          <div class="section-title">补贴奖金</div>
+          <div class="kv">
+            <div class="kv-item">
+              <span class="label">全勤奖</span>
+              <span class="value">{{ row.allowanceFullAttendance }}</span>
+            </div>
+            <div class="kv-item">
+              <span class="label">安全奖</span>
+              <span class="value">{{ row.allowanceSafety }}</span>
+            </div>
+            <div class="kv-item">
+              <span class="label">工龄工资</span>
+              <span class="value">{{ row.allowanceSeniority }}</span>
+            </div>
+            <div class="kv-item">
+              <span class="label">职务工资</span>
+              <span class="value">{{ row.allowancePosition }}</span>
+            </div>
+            <div class="kv-item">
+              <span class="label">浮动工资</span>
+              <span class="value">{{ row.allowanceFloating }}</span>
+            </div>
+            <div class="kv-item">
+              <span class="label">保密工资</span>
+              <span class="value">{{ row.allowanceConfidentiality }}</span>
+            </div>
+            <div class="kv-item">
+              <span class="label">交通补贴</span>
+              <span class="value">{{ row.allowanceTransportation }}</span>
+            </div>
+            <div class="kv-item">
+              <span class="label">特种作业证补贴</span>
+              <span class="value">{{ row.allowanceSpecialCertificate }}</span>
+            </div>
+            <div class="kv-item">
+              <span class="label">节假日补贴</span>
+              <span class="value">{{ row.allowanceHoliday }}</span>
+            </div>
+            <div class="kv-item">
+              <span class="label">工作表现奖</span>
+              <span class="value">{{ row.allowancePerformance }}</span>
+            </div>
+            <div class="kv-item">
+              <span class="label">安全培训补贴</span>
+              <span class="value">{{ row.allowanceSafetyTraining }}</span>
+            </div>
+            <div class="kv-item">
+              <span class="label">绩效考核奖</span>
+              <span class="value">{{ row.allowanceAssessment }}</span>
+            </div>
+            <div class="kv-item">
+              <span class="label">其它应发小计</span>
+              <span class="value">{{ row.allowanceSubtotal }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="card-section">
+          <div class="section-title">加班</div>
+          <div class="kv">
+            <div class="kv-item">
+              <span class="label">加班天数</span>
+              <span class="value">{{ row.overtimeDays }}</span>
+            </div>
+            <div class="kv-item">
+              <span class="label">加班金额</span>
+              <span class="value">{{ row.overtimeAmount }}</span>
+            </div>
+            <div class="kv-item">
+              <span class="label">中班天数</span>
+              <span class="value">{{ row.overtimeMidShiftDays }}</span>
+            </div>
+            <div class="kv-item">
+              <span class="label">中班补贴金额</span>
+              <span class="value">{{ row.overtimeMidShiftAmount }}</span>
+            </div>
+            <div class="kv-item">
+              <span class="label">夜班天数</span>
+              <span class="value">{{ row.overtimeNightShiftDays }}</span>
+            </div>
+            <div class="kv-item">
+              <span class="label">夜班补贴金额</span>
+              <span class="value">{{ row.overtimeNightShiftAmount }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="card-section">
+          <div class="section-title">扣款</div>
+          <div class="kv">
+            <div class="kv-item">
+              <span class="label">违纪扣款</span>
+              <span class="value">{{ row.deductionDiscipline }}</span>
+            </div>
+            <div class="kv-item">
+              <span class="label">个人所得税</span>
+              <span class="value">{{ row.deductionTax }}</span>
+            </div>
+            <div class="kv-item">
+              <span class="label">代扣公积金</span>
+              <span class="value">{{ row.deductionHousingFund }}</span>
+            </div>
+            <div class="kv-item">
+              <span class="label">代扣代缴保险</span>
+              <span class="value">{{ row.deductionInsurance }}</span>
+            </div>
+            <div class="kv-item">
+              <span class="label">暂扣工资</span>
+              <span class="value">{{ row.deductionWithhold }}</span>
+            </div>
+            <div class="kv-item">
+              <span class="label">应扣小计</span>
+              <span class="value">{{ row.deductionSubtotal }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="card-actions">
+          <el-button
+            v-if="!isConfirmed(row)"
+            size="mini"
+            type="primary"
+            @click="handleConfirm(row)"
+            v-hasPermi="['kangderui:detail:confirm']"
+          >确认</el-button>
+        </div>
+      </div>
+    </div>
 
     <el-table
       v-loading="loading"
@@ -24,6 +193,7 @@
       stripe
       size="small"
       :max-height="520"
+      class="salary-table"
     >
       <el-table-column label="基础信息" align="center">
         <el-table-column label="主键ID" align="center" prop="salaryDetailId" v-if="false" />
@@ -165,3 +335,112 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.salary-cards {
+  display: none;
+}
+
+.salary-card {
+  background: #fff;
+  border: 1px solid #ebeef5;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  gap: 8px;
+}
+
+.card-header .title {
+  font-weight: 600;
+  font-size: 14px;
+  color: #303133;
+}
+
+.card-section {
+  padding: 6px 0;
+  border-top: 1px dashed #ebeef5;
+}
+
+.card-section:first-of-type {
+  border-top: none;
+}
+
+.section-title {
+  font-size: 12px;
+  color: #909399;
+  margin-bottom: 6px;
+}
+
+.kv {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+}
+
+.kv-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  font-size: 12px;
+}
+
+.kv-item .label {
+  color: #909399;
+}
+
+.kv-item .value {
+  color: #303133;
+  font-weight: 500;
+}
+
+.card-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 8px;
+}
+
+@media (max-width: 768px) {
+  .salary-cards {
+    display: block;
+  }
+
+  .salary-table {
+    display: none;
+  }
+
+  .app-container {
+    padding: 12px;
+  }
+
+  .app-container .el-form--inline .el-form-item {
+    display: block;
+    margin-right: 0;
+  }
+
+  .app-container .el-form--inline .el-form-item__content {
+    width: 100%;
+  }
+
+  .app-container .el-date-editor {
+    width: 100%;
+  }
+
+  .search-actions .el-form-item__content {
+    display: flex;
+    gap: 8px;
+  }
+
+  .search-actions .el-button {
+    flex: 1;
+  }
+}
+</style>

@@ -17,11 +17,26 @@
         <pane size="84">
           <el-col>
             <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-              <el-form-item label="用户名称" prop="userName">
-                <el-input v-model="queryParams.userName" placeholder="请输入用户名称" clearable style="width: 240px" @keyup.enter.native="handleQuery" />
-              </el-form-item>
-              <el-form-item label="手机号码" prop="phonenumber">
-                <el-input v-model="queryParams.phonenumber" placeholder="请输入手机号码" clearable style="width: 240px" @keyup.enter.native="handleQuery" />
+              <el-form-item label="员工姓名" prop="nickName">
+                <el-select
+                  v-model="queryParams.nickName"
+                  filterable
+                  remote
+                  clearable
+                  reserve-keyword
+                  placeholder="请输入姓名"
+                  :remote-method="queryUserOptions"
+                  :loading="userSearchLoading"
+                  @change="handleQuery"
+                  @clear="clearUserSearch"
+                >
+                  <el-option
+                    v-for="item in userSearchOptions"
+                    :key="item.userId"
+                    :label="item.nickName"
+                    :value="item.nickName"
+                  />
+                </el-select>
               </el-form-item>
               <el-form-item label="状态" prop="status">
                 <el-select v-model="queryParams.status" placeholder="用户状态" clearable style="width: 240px">
@@ -234,7 +249,13 @@ export default {
       deptOptions: undefined,
       // 过滤掉已禁用部门树选项
       enabledDeptOptions: undefined,
-      // 是否显示弹出层
+      // 员工下拉选项
+      userOptions: [],
+      // 搜索下拉选项
+      userSearchOptions: [],
+      deptSearchOptions: [],
+      userSearchLoading: false,
+      deptSearchLoading: false,      // 是否显示弹出层
       open: false,
       // 部门名称
       deptName: undefined,
@@ -271,8 +292,7 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        userName: undefined,
-        phonenumber: undefined,
+        nickName: undefined,
         status: undefined,
         deptId: undefined
       },
@@ -369,6 +389,25 @@ export default {
     handleNodeClick(data) {
       this.queryParams.deptId = data.id
       this.handleQuery()
+    },
+    queryUserOptions(query) {
+      if (!query) {
+        this.userSearchOptions = []
+        return
+      }
+      this.userSearchLoading = true
+      listUser({ pageNum: 1, pageSize: 20, nickName: query, status: "0" }).then(response => {
+        this.userSearchOptions = (response.rows || []).map(item => ({
+          userId: item.userId,
+          nickName: item.nickName
+        }))
+        this.userSearchLoading = false
+      }).catch(() => {
+        this.userSearchLoading = false
+      })
+    },
+    clearUserSearch() {
+      this.userSearchOptions = []
     },
     // 用户状态修改
     handleStatusChange(row) {
