@@ -214,10 +214,9 @@ public class SalaryDetailController extends BaseController {
                 return rows;
             }
             int lastCellNum = headerRow.getLastCellNum();
-            List<String> headers = new ArrayList<>();
+            List<Integer> headers = new ArrayList<>();
             for (int i = 0; i < lastCellNum; i++) {
-                String header = StringUtils.trimToEmpty(Convert.toStr(getCellValue(headerRow.getCell(i))));
-                headers.add(header);
+                headers.add(i);
             }
             int lastRowNum = sheet.getLastRowNum();
             for (int i = titleRowIndex + 1; i <= lastRowNum; i++) {
@@ -227,10 +226,6 @@ public class SalaryDetailController extends BaseController {
                 }
                 Map<Integer, Object> rowMap = new LinkedHashMap<>();
                 for (int j = 0; j < headers.size(); j++) {
-                    String header = headers.get(j);
-                    if (StringUtils.isEmpty(header)) {
-                        continue;
-                    }
                     rowMap.put(j, getCellValue(row.getCell(j)));
                 }
                 rows.add(rowMap);
