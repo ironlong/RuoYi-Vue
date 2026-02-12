@@ -106,7 +106,7 @@ public class SalaryDetailController extends BaseController {
     @PreAuthorize("@ss.hasPermi('kangderui:detail:import')")
     @PostMapping("/importData")
     public AjaxResult importData(MultipartFile file) throws Exception {
-        List<Map<Integer, Object>> rowMaps = parseExcelToMapList(file, 5);
+        List<Map<Integer, Object>> rowMaps = parseExcelToMapList(file, 4);
         Object deptNameValue = getExcelCellValue(file, 0, 0, 0);
         Object salaryPeriod = getExcelCellValue(file, 0, 1, 7);
         List<SalaryDetail> detailList = mapToSalaryDetails(rowMaps, deptNameValue, salaryPeriod);
