@@ -25,150 +25,165 @@
             {{ isConfirmed(row) ? "已确认" : "未确认" }}
           </el-tag>
         </div>
-        <div class="card-section">
+        <div
+          class="card-section"
+          v-if="hasVisibleFields(row, ['totalEarnings', 'netSalary'])"
+        >
           <div class="section-title">汇总</div>
           <div class="kv">
-            <div class="kv-item">
+            <div class="kv-item" v-if="shouldShowField(row, 'totalEarnings')">
               <span class="label">应发金额</span>
               <span class="value">{{ row.totalEarnings }}</span>
             </div>
-            <div class="kv-item">
+            <div class="kv-item" v-if="shouldShowField(row, 'netSalary')">
               <span class="label">实发金额</span>
               <span class="value">{{ row.netSalary }}</span>
             </div>
           </div>
         </div>
-        <div class="card-section">
+        <div
+          class="card-section"
+          v-if="hasVisibleFields(row, ['basicSalary', 'basicDailySalary', 'basicWorkDays', 'basicSubtotal'])"
+        >
           <div class="section-title">基本工资</div>
           <div class="kv">
-            <div class="kv-item">
+            <div class="kv-item" v-if="shouldShowField(row, 'basicSalary')">
               <span class="label">基本工资</span>
               <span class="value">{{ row.basicSalary }}</span>
             </div>
-            <div class="kv-item">
+            <div class="kv-item" v-if="shouldShowField(row, 'basicDailySalary')">
               <span class="label">日工资</span>
               <span class="value">{{ row.basicDailySalary }}</span>
             </div>
-            <div class="kv-item">
+            <div class="kv-item" v-if="shouldShowField(row, 'basicWorkDays')">
               <span class="label">工作日</span>
               <span class="value">{{ row.basicWorkDays }}</span>
             </div>
-            <div class="kv-item">
+            <div class="kv-item" v-if="shouldShowField(row, 'basicSubtotal')">
               <span class="label">小计</span>
               <span class="value">{{ row.basicSubtotal }}</span>
             </div>
           </div>
         </div>
-        <div class="card-section">
+        <div
+          class="card-section"
+          v-if="hasVisibleFields(row, ['allowanceFullAttendance', 'allowanceSafety', 'allowanceSeniority', 'allowancePosition', 'allowanceFloating', 'allowanceConfidentiality', 'allowanceTransportation', 'allowanceSpecialCertificate', 'allowanceHoliday', 'allowancePerformance', 'allowanceSafetyTraining', 'allowanceAssessment', 'allowanceSubtotal'])"
+        >
           <div class="section-title">补贴奖金</div>
           <div class="kv">
-            <div class="kv-item">
+            <div class="kv-item" v-if="shouldShowField(row, 'allowanceFullAttendance')">
               <span class="label">全勤奖</span>
               <span class="value">{{ row.allowanceFullAttendance }}</span>
             </div>
-            <div class="kv-item">
+            <div class="kv-item" v-if="shouldShowField(row, 'allowanceSafety')">
               <span class="label">安全奖</span>
               <span class="value">{{ row.allowanceSafety }}</span>
             </div>
-            <div class="kv-item">
+            <div class="kv-item" v-if="shouldShowField(row, 'allowanceSeniority')">
               <span class="label">工龄工资</span>
               <span class="value">{{ row.allowanceSeniority }}</span>
             </div>
-            <div class="kv-item">
+            <div class="kv-item" v-if="shouldShowField(row, 'allowancePosition')">
               <span class="label">职务工资</span>
               <span class="value">{{ row.allowancePosition }}</span>
             </div>
-            <div class="kv-item">
+            <div class="kv-item" v-if="shouldShowField(row, 'allowanceFloating')">
               <span class="label">浮动工资</span>
               <span class="value">{{ row.allowanceFloating }}</span>
             </div>
-            <div class="kv-item">
+            <div class="kv-item" v-if="shouldShowField(row, 'allowanceConfidentiality')">
               <span class="label">保密工资</span>
               <span class="value">{{ row.allowanceConfidentiality }}</span>
             </div>
-            <div class="kv-item">
+            <div class="kv-item" v-if="shouldShowField(row, 'allowanceTransportation')">
               <span class="label">交通补贴</span>
               <span class="value">{{ row.allowanceTransportation }}</span>
             </div>
-            <div class="kv-item">
+            <div class="kv-item" v-if="shouldShowField(row, 'allowanceSpecialCertificate')">
               <span class="label">特种作业证补贴</span>
               <span class="value">{{ row.allowanceSpecialCertificate }}</span>
             </div>
-            <div class="kv-item">
+            <div class="kv-item" v-if="shouldShowField(row, 'allowanceHoliday')">
               <span class="label">节假日补贴</span>
               <span class="value">{{ row.allowanceHoliday }}</span>
             </div>
-            <div class="kv-item">
+            <div class="kv-item" v-if="shouldShowField(row, 'allowancePerformance')">
               <span class="label">工作表现奖</span>
               <span class="value">{{ row.allowancePerformance }}</span>
             </div>
-            <div class="kv-item">
+            <div class="kv-item" v-if="shouldShowField(row, 'allowanceSafetyTraining')">
               <span class="label">安全培训补贴</span>
               <span class="value">{{ row.allowanceSafetyTraining }}</span>
             </div>
-            <div class="kv-item">
+            <div class="kv-item" v-if="shouldShowField(row, 'allowanceAssessment')">
               <span class="label">绩效考核奖</span>
               <span class="value">{{ row.allowanceAssessment }}</span>
             </div>
-            <div class="kv-item">
+            <div class="kv-item" v-if="shouldShowField(row, 'allowanceSubtotal')">
               <span class="label">其它应发小计</span>
               <span class="value">{{ row.allowanceSubtotal }}</span>
             </div>
           </div>
         </div>
-        <div class="card-section">
+        <div
+          class="card-section"
+          v-if="hasVisibleFields(row, ['overtimeDays', 'overtimeAmount', 'overtimeMidShiftDays', 'overtimeMidShiftAmount', 'overtimeNightShiftDays', 'overtimeNightShiftAmount'])"
+        >
           <div class="section-title">加班</div>
           <div class="kv">
-            <div class="kv-item">
+            <div class="kv-item" v-if="shouldShowField(row, 'overtimeDays')">
               <span class="label">加班天数</span>
               <span class="value">{{ row.overtimeDays }}</span>
             </div>
-            <div class="kv-item">
+            <div class="kv-item" v-if="shouldShowField(row, 'overtimeAmount')">
               <span class="label">加班金额</span>
               <span class="value">{{ row.overtimeAmount }}</span>
             </div>
-            <div class="kv-item">
+            <div class="kv-item" v-if="shouldShowField(row, 'overtimeMidShiftDays')">
               <span class="label">中班天数</span>
               <span class="value">{{ row.overtimeMidShiftDays }}</span>
             </div>
-            <div class="kv-item">
+            <div class="kv-item" v-if="shouldShowField(row, 'overtimeMidShiftAmount')">
               <span class="label">中班补贴金额</span>
               <span class="value">{{ row.overtimeMidShiftAmount }}</span>
             </div>
-            <div class="kv-item">
+            <div class="kv-item" v-if="shouldShowField(row, 'overtimeNightShiftDays')">
               <span class="label">夜班天数</span>
               <span class="value">{{ row.overtimeNightShiftDays }}</span>
             </div>
-            <div class="kv-item">
+            <div class="kv-item" v-if="shouldShowField(row, 'overtimeNightShiftAmount')">
               <span class="label">夜班补贴金额</span>
               <span class="value">{{ row.overtimeNightShiftAmount }}</span>
             </div>
           </div>
         </div>
-        <div class="card-section">
+        <div
+          class="card-section"
+          v-if="hasVisibleFields(row, ['deductionDiscipline', 'deductionTax', 'deductionHousingFund', 'deductionInsurance', 'deductionWithhold', 'deductionSubtotal'])"
+        >
           <div class="section-title">扣款</div>
           <div class="kv">
-            <div class="kv-item">
+            <div class="kv-item" v-if="shouldShowField(row, 'deductionDiscipline')">
               <span class="label">违纪扣款</span>
               <span class="value">{{ row.deductionDiscipline }}</span>
             </div>
-            <div class="kv-item">
+            <div class="kv-item" v-if="shouldShowField(row, 'deductionTax')">
               <span class="label">个人所得税</span>
               <span class="value">{{ row.deductionTax }}</span>
             </div>
-            <div class="kv-item">
+            <div class="kv-item" v-if="shouldShowField(row, 'deductionHousingFund')">
               <span class="label">代扣公积金</span>
               <span class="value">{{ row.deductionHousingFund }}</span>
             </div>
-            <div class="kv-item">
+            <div class="kv-item" v-if="shouldShowField(row, 'deductionInsurance')">
               <span class="label">代扣代缴保险</span>
               <span class="value">{{ row.deductionInsurance }}</span>
             </div>
-            <div class="kv-item">
+            <div class="kv-item" v-if="shouldShowField(row, 'deductionWithhold')">
               <span class="label">暂扣工资</span>
               <span class="value">{{ row.deductionWithhold }}</span>
             </div>
-            <div class="kv-item">
+            <div class="kv-item" v-if="shouldShowField(row, 'deductionSubtotal')">
               <span class="label">应扣小计</span>
               <span class="value">{{ row.deductionSubtotal }}</span>
             </div>
@@ -315,6 +330,30 @@ export default {
     isConfirmed(row) {
       return String(row.remark) === "1"
     },
+    shouldShowValue(value, keepZero = false) {
+      if (value === null || value === undefined) {
+        return false
+      }
+      const normalized = String(value).trim().replace(/,/g, "")
+      if (normalized === "") {
+        return false
+      }
+      const numericValue = Number(normalized)
+      if (!Number.isNaN(numericValue)) {
+        return keepZero ? true : numericValue !== 0
+      }
+      return true
+    },
+    isAmountField(fieldKey) {
+      const nonAmountFields = ["basicWorkDays", "overtimeDays", "overtimeMidShiftDays", "overtimeNightShiftDays"]
+      return !nonAmountFields.includes(fieldKey)
+    },
+    shouldShowField(row, fieldKey) {
+      return this.shouldShowValue(row[fieldKey], this.isAmountField(fieldKey))
+    },
+    hasVisibleFields(row, fieldKeys) {
+      return fieldKeys.some(key => this.shouldShowField(row, key))
+    },
     handleConfirm(row) {
       const salaryDetailId = row.salaryDetailId
       this.$modal.confirm("确认工资无误后将无法撤销，是否继续？").then(() => {
@@ -394,11 +433,11 @@ export default {
 }
 
 .kv-item .label {
-  color: #909399;
+  color: #303133;
 }
 
 .kv-item .value {
-  color: #303133;
+  color: #909399;
   font-weight: 500;
 }
 
@@ -421,6 +460,22 @@ export default {
     padding: 12px;
   }
 
+  .card-header .title {
+    font-size: 18px;
+  }
+
+  .section-title {
+    font-size: 15px;
+  }
+
+  .kv-item {
+    font-size: 16px;
+  }
+
+  .kv-item .label {
+    font-size: 16px;
+  }
+
   .app-container .el-form--inline .el-form-item {
     display: block;
     margin-right: 0;
@@ -441,6 +496,7 @@ export default {
 
   .search-actions .el-button {
     flex: 1;
+    font-size: 14px;
   }
 }
 </style>
