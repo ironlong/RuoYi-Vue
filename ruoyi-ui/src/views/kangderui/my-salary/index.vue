@@ -115,6 +115,10 @@
               <span class="label">安全培训补贴</span>
               <span class="value">{{ row.allowanceSafetyTraining }}</span>
             </div>
+            <div class="kv-item" v-if="shouldShowField(row, 'allowanceHighTemperature')">
+              <span class="label">高温费补贴</span>
+              <span class="value">{{ row.allowanceHighTemperature }}</span>
+            </div>
             <div class="kv-item" v-if="shouldShowField(row, 'allowanceAssessment')">
               <span class="label">绩效考核奖</span>
               <span class="value">{{ row.allowanceAssessment }}</span>
@@ -240,6 +244,7 @@
         <el-table-column label="节假日补贴" align="center" prop="allowanceHoliday" />
         <el-table-column label="工作表现奖" align="center" prop="allowancePerformance" />
         <el-table-column label="安全培训补贴" align="center" prop="allowanceSafetyTraining" />
+        <el-table-column label="高温费补贴" align="center" prop="allowanceHighTemperature" />
         <el-table-column label="绩效考核奖" align="center" prop="allowanceAssessment" />
         <el-table-column label="其它应发小计" align="center" prop="allowanceSubtotal" />
       </el-table-column>

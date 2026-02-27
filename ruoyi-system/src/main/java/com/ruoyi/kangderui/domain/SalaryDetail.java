@@ -8,9 +8,9 @@ import com.ruoyi.common.core.domain.BaseEntity;
 
 /**
  * 员工工资明细对象 salary_detail
- * 
+ *
  * @author ruoyi
- * @date 2026-02-02
+ * @date 2026-02-26
  */
 public class SalaryDetail extends BaseEntity
 {
@@ -107,6 +107,10 @@ public class SalaryDetail extends BaseEntity
     @Excel(name = "绩效考核奖")
     private BigDecimal allowanceAssessment;
 
+    /** 高温费补贴 */
+    @Excel(name = "高温费补贴")
+    private BigDecimal allowanceHighTemperature;
+
     /** 加班天数 */
     @Excel(name = "加班天数")
     private BigDecimal overtimeDays;
@@ -167,382 +171,392 @@ public class SalaryDetail extends BaseEntity
     @Excel(name = "实发金额")
     private BigDecimal netSalary;
 
-    public void setSalaryDetailId(Long salaryDetailId) 
+    public void setSalaryDetailId(Long salaryDetailId)
     {
         this.salaryDetailId = salaryDetailId;
     }
 
-    public Long getSalaryDetailId() 
+    public Long getSalaryDetailId()
     {
         return salaryDetailId;
     }
 
-    public void setUserId(Long userId) 
+    public void setUserId(Long userId)
     {
         this.userId = userId;
     }
 
-    public Long getUserId() 
+    public Long getUserId()
     {
         return userId;
     }
 
-    public void setNickName(String nickName) 
+    public void setNickName(String nickName)
     {
         this.nickName = nickName;
     }
 
-    public String getNickName() 
+    public String getNickName()
     {
         return nickName;
     }
 
-    public void setBankCardNumber(String bankCardNumber) 
+    public void setBankCardNumber(String bankCardNumber)
     {
         this.bankCardNumber = bankCardNumber;
     }
 
-    public String getBankCardNumber() 
+    public String getBankCardNumber()
     {
         return bankCardNumber;
     }
 
-    public void setDeptId(Long deptId) 
+    public void setDeptId(Long deptId)
     {
         this.deptId = deptId;
     }
 
-    public Long getDeptId() 
+    public Long getDeptId()
     {
         return deptId;
     }
 
-    public void setDeptName(String deptName) 
+    public void setDeptName(String deptName)
     {
         this.deptName = deptName;
     }
 
-    public String getDeptName() 
+    public String getDeptName()
     {
         return deptName;
     }
 
-    public void setSalaryPeriod(String salaryPeriod) 
+    public void setSalaryPeriod(String salaryPeriod)
     {
         this.salaryPeriod = salaryPeriod;
     }
 
-    public String getSalaryPeriod() 
+    public String getSalaryPeriod()
     {
         return salaryPeriod;
     }
 
-    public void setBasicSalary(BigDecimal basicSalary) 
+    public void setBasicSalary(BigDecimal basicSalary)
     {
         this.basicSalary = basicSalary;
     }
 
-    public BigDecimal getBasicSalary() 
+    public BigDecimal getBasicSalary()
     {
         return basicSalary;
     }
 
-    public void setBasicDailySalary(BigDecimal basicDailySalary) 
+    public void setBasicDailySalary(BigDecimal basicDailySalary)
     {
         this.basicDailySalary = basicDailySalary;
     }
 
-    public BigDecimal getBasicDailySalary() 
+    public BigDecimal getBasicDailySalary()
     {
         return basicDailySalary;
     }
 
-    public void setBasicWorkDays(Long basicWorkDays) 
+    public void setBasicWorkDays(Long basicWorkDays)
     {
         this.basicWorkDays = basicWorkDays;
     }
 
-    public Long getBasicWorkDays() 
+    public Long getBasicWorkDays()
     {
         return basicWorkDays;
     }
 
-    public void setBasicSubtotal(BigDecimal basicSubtotal) 
+    public void setBasicSubtotal(BigDecimal basicSubtotal)
     {
         this.basicSubtotal = basicSubtotal;
     }
 
-    public BigDecimal getBasicSubtotal() 
+    public BigDecimal getBasicSubtotal()
     {
         return basicSubtotal;
     }
 
-    public void setAllowanceFullAttendance(BigDecimal allowanceFullAttendance) 
+    public void setAllowanceFullAttendance(BigDecimal allowanceFullAttendance)
     {
         this.allowanceFullAttendance = allowanceFullAttendance;
     }
 
-    public BigDecimal getAllowanceFullAttendance() 
+    public BigDecimal getAllowanceFullAttendance()
     {
         return allowanceFullAttendance;
     }
 
-    public void setAllowanceSafety(BigDecimal allowanceSafety) 
+    public void setAllowanceSafety(BigDecimal allowanceSafety)
     {
         this.allowanceSafety = allowanceSafety;
     }
 
-    public BigDecimal getAllowanceSafety() 
+    public BigDecimal getAllowanceSafety()
     {
         return allowanceSafety;
     }
 
-    public void setAllowanceSeniority(BigDecimal allowanceSeniority) 
+    public void setAllowanceSeniority(BigDecimal allowanceSeniority)
     {
         this.allowanceSeniority = allowanceSeniority;
     }
 
-    public BigDecimal getAllowanceSeniority() 
+    public BigDecimal getAllowanceSeniority()
     {
         return allowanceSeniority;
     }
 
-    public void setAllowancePosition(BigDecimal allowancePosition) 
+    public void setAllowancePosition(BigDecimal allowancePosition)
     {
         this.allowancePosition = allowancePosition;
     }
 
-    public BigDecimal getAllowancePosition() 
+    public BigDecimal getAllowancePosition()
     {
         return allowancePosition;
     }
 
-    public void setAllowanceFloating(BigDecimal allowanceFloating) 
+    public void setAllowanceFloating(BigDecimal allowanceFloating)
     {
         this.allowanceFloating = allowanceFloating;
     }
 
-    public BigDecimal getAllowanceFloating() 
+    public BigDecimal getAllowanceFloating()
     {
         return allowanceFloating;
     }
 
-    public void setAllowanceConfidentiality(BigDecimal allowanceConfidentiality) 
+    public void setAllowanceConfidentiality(BigDecimal allowanceConfidentiality)
     {
         this.allowanceConfidentiality = allowanceConfidentiality;
     }
 
-    public BigDecimal getAllowanceConfidentiality() 
+    public BigDecimal getAllowanceConfidentiality()
     {
         return allowanceConfidentiality;
     }
 
-    public void setAllowanceTransportation(BigDecimal allowanceTransportation) 
+    public void setAllowanceTransportation(BigDecimal allowanceTransportation)
     {
         this.allowanceTransportation = allowanceTransportation;
     }
 
-    public BigDecimal getAllowanceTransportation() 
+    public BigDecimal getAllowanceTransportation()
     {
         return allowanceTransportation;
     }
 
-    public void setAllowanceSpecialCertificate(BigDecimal allowanceSpecialCertificate) 
+    public void setAllowanceSpecialCertificate(BigDecimal allowanceSpecialCertificate)
     {
         this.allowanceSpecialCertificate = allowanceSpecialCertificate;
     }
 
-    public BigDecimal getAllowanceSpecialCertificate() 
+    public BigDecimal getAllowanceSpecialCertificate()
     {
         return allowanceSpecialCertificate;
     }
 
-    public void setAllowanceHoliday(BigDecimal allowanceHoliday) 
+    public void setAllowanceHoliday(BigDecimal allowanceHoliday)
     {
         this.allowanceHoliday = allowanceHoliday;
     }
 
-    public BigDecimal getAllowanceHoliday() 
+    public BigDecimal getAllowanceHoliday()
     {
         return allowanceHoliday;
     }
 
-    public void setAllowancePerformance(BigDecimal allowancePerformance) 
+    public void setAllowancePerformance(BigDecimal allowancePerformance)
     {
         this.allowancePerformance = allowancePerformance;
     }
 
-    public BigDecimal getAllowancePerformance() 
+    public BigDecimal getAllowancePerformance()
     {
         return allowancePerformance;
     }
 
-    public void setAllowanceSafetyTraining(BigDecimal allowanceSafetyTraining) 
+    public void setAllowanceSafetyTraining(BigDecimal allowanceSafetyTraining)
     {
         this.allowanceSafetyTraining = allowanceSafetyTraining;
     }
 
-    public BigDecimal getAllowanceSafetyTraining() 
+    public BigDecimal getAllowanceSafetyTraining()
     {
         return allowanceSafetyTraining;
     }
 
-    public void setAllowanceAssessment(BigDecimal allowanceAssessment) 
+    public void setAllowanceAssessment(BigDecimal allowanceAssessment)
     {
         this.allowanceAssessment = allowanceAssessment;
     }
 
-    public BigDecimal getAllowanceAssessment() 
+    public BigDecimal getAllowanceAssessment()
     {
         return allowanceAssessment;
     }
 
-    public void setOvertimeDays(BigDecimal overtimeDays) 
+    public void setAllowanceHighTemperature(BigDecimal allowanceHighTemperature)
+    {
+        this.allowanceHighTemperature = allowanceHighTemperature;
+    }
+
+    public BigDecimal getAllowanceHighTemperature()
+    {
+        return allowanceHighTemperature;
+    }
+
+    public void setOvertimeDays(BigDecimal overtimeDays)
     {
         this.overtimeDays = overtimeDays;
     }
 
-    public BigDecimal getOvertimeDays() 
+    public BigDecimal getOvertimeDays()
     {
         return overtimeDays;
     }
 
-    public void setOvertimeAmount(BigDecimal overtimeAmount) 
+    public void setOvertimeAmount(BigDecimal overtimeAmount)
     {
         this.overtimeAmount = overtimeAmount;
     }
 
-    public BigDecimal getOvertimeAmount() 
+    public BigDecimal getOvertimeAmount()
     {
         return overtimeAmount;
     }
 
-    public void setOvertimeMidShiftDays(BigDecimal overtimeMidShiftDays) 
+    public void setOvertimeMidShiftDays(BigDecimal overtimeMidShiftDays)
     {
         this.overtimeMidShiftDays = overtimeMidShiftDays;
     }
 
-    public BigDecimal getOvertimeMidShiftDays() 
+    public BigDecimal getOvertimeMidShiftDays()
     {
         return overtimeMidShiftDays;
     }
 
-    public void setOvertimeMidShiftAmount(BigDecimal overtimeMidShiftAmount) 
+    public void setOvertimeMidShiftAmount(BigDecimal overtimeMidShiftAmount)
     {
         this.overtimeMidShiftAmount = overtimeMidShiftAmount;
     }
 
-    public BigDecimal getOvertimeMidShiftAmount() 
+    public BigDecimal getOvertimeMidShiftAmount()
     {
         return overtimeMidShiftAmount;
     }
 
-    public void setOvertimeNightShiftDays(BigDecimal overtimeNightShiftDays) 
+    public void setOvertimeNightShiftDays(BigDecimal overtimeNightShiftDays)
     {
         this.overtimeNightShiftDays = overtimeNightShiftDays;
     }
 
-    public BigDecimal getOvertimeNightShiftDays() 
+    public BigDecimal getOvertimeNightShiftDays()
     {
         return overtimeNightShiftDays;
     }
 
-    public void setOvertimeNightShiftAmount(BigDecimal overtimeNightShiftAmount) 
+    public void setOvertimeNightShiftAmount(BigDecimal overtimeNightShiftAmount)
     {
         this.overtimeNightShiftAmount = overtimeNightShiftAmount;
     }
 
-    public BigDecimal getOvertimeNightShiftAmount() 
+    public BigDecimal getOvertimeNightShiftAmount()
     {
         return overtimeNightShiftAmount;
     }
 
-    public void setAllowanceSubtotal(BigDecimal allowanceSubtotal) 
+    public void setAllowanceSubtotal(BigDecimal allowanceSubtotal)
     {
         this.allowanceSubtotal = allowanceSubtotal;
     }
 
-    public BigDecimal getAllowanceSubtotal() 
+    public BigDecimal getAllowanceSubtotal()
     {
         return allowanceSubtotal;
     }
 
-    public void setTotalEarnings(BigDecimal totalEarnings) 
+    public void setTotalEarnings(BigDecimal totalEarnings)
     {
         this.totalEarnings = totalEarnings;
     }
 
-    public BigDecimal getTotalEarnings() 
+    public BigDecimal getTotalEarnings()
     {
         return totalEarnings;
     }
 
-    public void setDeductionDiscipline(BigDecimal deductionDiscipline) 
+    public void setDeductionDiscipline(BigDecimal deductionDiscipline)
     {
         this.deductionDiscipline = deductionDiscipline;
     }
 
-    public BigDecimal getDeductionDiscipline() 
+    public BigDecimal getDeductionDiscipline()
     {
         return deductionDiscipline;
     }
 
-    public void setDeductionTax(BigDecimal deductionTax) 
+    public void setDeductionTax(BigDecimal deductionTax)
     {
         this.deductionTax = deductionTax;
     }
 
-    public BigDecimal getDeductionTax() 
+    public BigDecimal getDeductionTax()
     {
         return deductionTax;
     }
 
-    public void setDeductionHousingFund(BigDecimal deductionHousingFund) 
+    public void setDeductionHousingFund(BigDecimal deductionHousingFund)
     {
         this.deductionHousingFund = deductionHousingFund;
     }
 
-    public BigDecimal getDeductionHousingFund() 
+    public BigDecimal getDeductionHousingFund()
     {
         return deductionHousingFund;
     }
 
-    public void setDeductionInsurance(BigDecimal deductionInsurance) 
+    public void setDeductionInsurance(BigDecimal deductionInsurance)
     {
         this.deductionInsurance = deductionInsurance;
     }
 
-    public BigDecimal getDeductionInsurance() 
+    public BigDecimal getDeductionInsurance()
     {
         return deductionInsurance;
     }
 
-    public void setDeductionWithhold(BigDecimal deductionWithhold) 
+    public void setDeductionWithhold(BigDecimal deductionWithhold)
     {
         this.deductionWithhold = deductionWithhold;
     }
 
-    public BigDecimal getDeductionWithhold() 
+    public BigDecimal getDeductionWithhold()
     {
         return deductionWithhold;
     }
 
-    public void setDeductionSubtotal(BigDecimal deductionSubtotal) 
+    public void setDeductionSubtotal(BigDecimal deductionSubtotal)
     {
         this.deductionSubtotal = deductionSubtotal;
     }
 
-    public BigDecimal getDeductionSubtotal() 
+    public BigDecimal getDeductionSubtotal()
     {
         return deductionSubtotal;
     }
 
-    public void setNetSalary(BigDecimal netSalary) 
+    public void setNetSalary(BigDecimal netSalary)
     {
         this.netSalary = netSalary;
     }
 
-    public BigDecimal getNetSalary() 
+    public BigDecimal getNetSalary()
     {
         return netSalary;
     }
@@ -550,49 +564,50 @@ public class SalaryDetail extends BaseEntity
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("salaryDetailId", getSalaryDetailId())
-            .append("userId", getUserId())
-            .append("nickName", getNickName())
-            .append("bankCardNumber", getBankCardNumber())
-            .append("deptId", getDeptId())
-            .append("deptName", getDeptName())
-            .append("salaryPeriod", getSalaryPeriod())
-            .append("basicSalary", getBasicSalary())
-            .append("basicDailySalary", getBasicDailySalary())
-            .append("basicWorkDays", getBasicWorkDays())
-            .append("basicSubtotal", getBasicSubtotal())
-            .append("allowanceFullAttendance", getAllowanceFullAttendance())
-            .append("allowanceSafety", getAllowanceSafety())
-            .append("allowanceSeniority", getAllowanceSeniority())
-            .append("allowancePosition", getAllowancePosition())
-            .append("allowanceFloating", getAllowanceFloating())
-            .append("allowanceConfidentiality", getAllowanceConfidentiality())
-            .append("allowanceTransportation", getAllowanceTransportation())
-            .append("allowanceSpecialCertificate", getAllowanceSpecialCertificate())
-            .append("allowanceHoliday", getAllowanceHoliday())
-            .append("allowancePerformance", getAllowancePerformance())
-            .append("allowanceSafetyTraining", getAllowanceSafetyTraining())
-            .append("allowanceAssessment", getAllowanceAssessment())
-            .append("overtimeDays", getOvertimeDays())
-            .append("overtimeAmount", getOvertimeAmount())
-            .append("overtimeMidShiftDays", getOvertimeMidShiftDays())
-            .append("overtimeMidShiftAmount", getOvertimeMidShiftAmount())
-            .append("overtimeNightShiftDays", getOvertimeNightShiftDays())
-            .append("overtimeNightShiftAmount", getOvertimeNightShiftAmount())
-            .append("allowanceSubtotal", getAllowanceSubtotal())
-            .append("totalEarnings", getTotalEarnings())
-            .append("deductionDiscipline", getDeductionDiscipline())
-            .append("deductionTax", getDeductionTax())
-            .append("deductionHousingFund", getDeductionHousingFund())
-            .append("deductionInsurance", getDeductionInsurance())
-            .append("deductionWithhold", getDeductionWithhold())
-            .append("deductionSubtotal", getDeductionSubtotal())
-            .append("netSalary", getNetSalary())
-            .append("createTime", getCreateTime())
-            .append("createBy", getCreateBy())
-            .append("updateBy", getUpdateBy())
-            .append("updateTime", getUpdateTime())
-            .append("remark", getRemark())
-            .toString();
+                .append("salaryDetailId", getSalaryDetailId())
+                .append("userId", getUserId())
+                .append("nickName", getNickName())
+                .append("bankCardNumber", getBankCardNumber())
+                .append("deptId", getDeptId())
+                .append("deptName", getDeptName())
+                .append("salaryPeriod", getSalaryPeriod())
+                .append("basicSalary", getBasicSalary())
+                .append("basicDailySalary", getBasicDailySalary())
+                .append("basicWorkDays", getBasicWorkDays())
+                .append("basicSubtotal", getBasicSubtotal())
+                .append("allowanceFullAttendance", getAllowanceFullAttendance())
+                .append("allowanceSafety", getAllowanceSafety())
+                .append("allowanceSeniority", getAllowanceSeniority())
+                .append("allowancePosition", getAllowancePosition())
+                .append("allowanceFloating", getAllowanceFloating())
+                .append("allowanceConfidentiality", getAllowanceConfidentiality())
+                .append("allowanceTransportation", getAllowanceTransportation())
+                .append("allowanceSpecialCertificate", getAllowanceSpecialCertificate())
+                .append("allowanceHoliday", getAllowanceHoliday())
+                .append("allowancePerformance", getAllowancePerformance())
+                .append("allowanceSafetyTraining", getAllowanceSafetyTraining())
+                .append("allowanceAssessment", getAllowanceAssessment())
+                .append("allowanceHighTemperature", getAllowanceHighTemperature())
+                .append("overtimeDays", getOvertimeDays())
+                .append("overtimeAmount", getOvertimeAmount())
+                .append("overtimeMidShiftDays", getOvertimeMidShiftDays())
+                .append("overtimeMidShiftAmount", getOvertimeMidShiftAmount())
+                .append("overtimeNightShiftDays", getOvertimeNightShiftDays())
+                .append("overtimeNightShiftAmount", getOvertimeNightShiftAmount())
+                .append("allowanceSubtotal", getAllowanceSubtotal())
+                .append("totalEarnings", getTotalEarnings())
+                .append("deductionDiscipline", getDeductionDiscipline())
+                .append("deductionTax", getDeductionTax())
+                .append("deductionHousingFund", getDeductionHousingFund())
+                .append("deductionInsurance", getDeductionInsurance())
+                .append("deductionWithhold", getDeductionWithhold())
+                .append("deductionSubtotal", getDeductionSubtotal())
+                .append("netSalary", getNetSalary())
+                .append("createTime", getCreateTime())
+                .append("createBy", getCreateBy())
+                .append("updateBy", getUpdateBy())
+                .append("updateTime", getUpdateTime())
+                .append("remark", getRemark())
+                .toString();
     }
 }

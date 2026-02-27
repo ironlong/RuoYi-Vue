@@ -157,6 +157,7 @@
         <el-table-column label="节假日补贴" align="center" prop="allowanceHoliday" />
         <el-table-column label="工作表现奖" align="center" prop="allowancePerformance" />
         <el-table-column label="安全培训补贴" align="center" prop="allowanceSafetyTraining" />
+        <el-table-column label="高温费补贴" align="center" prop="allowanceHighTemperature" />
         <el-table-column label="绩效考核奖" align="center" prop="allowanceAssessment" />
         <el-table-column label="其它应发小计" align="center" prop="allowanceSubtotal" />
       </el-table-column>
@@ -300,6 +301,9 @@
         </el-form-item>
         <el-form-item label="安全培训补贴" prop="allowanceSafetyTraining" label-width="110px">
           <el-input v-model="form.allowanceSafetyTraining" placeholder="请输入安全培训补贴" />
+        </el-form-item>
+        <el-form-item label="高温费补贴" prop="allowanceHighTemperature" label-width="110px">
+          <el-input v-model="form.allowanceHighTemperature" placeholder="请输入高温费补贴" />
         </el-form-item>
         <el-form-item label="绩效考核奖" prop="allowanceAssessment">
           <el-input v-model="form.allowanceAssessment" placeholder="请输入绩效考核奖" />
@@ -472,6 +476,7 @@ export default {
         allowanceHoliday: null,
         allowancePerformance: null,
         allowanceSafetyTraining: null,
+        allowanceHighTemperature:null,
         allowanceAssessment: null,
         overtimeDays: null,
         overtimeAmount: null,
@@ -580,6 +585,7 @@ export default {
         allowanceHoliday: null,
         allowancePerformance: null,
         allowanceSafetyTraining: null,
+        allowanceHighTemperature:null,
         allowanceAssessment: null,
         overtimeDays: null,
         overtimeAmount: null,
@@ -636,6 +642,7 @@ export default {
         "allowanceHoliday",
         "allowancePerformance",
         "allowanceSafetyTraining",
+        "allowanceHighTemperature",
         "allowanceAssessment",
         "overtimeAmount",
         "overtimeMidShiftAmount",
