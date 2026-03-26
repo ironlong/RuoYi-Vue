@@ -123,6 +123,8 @@
       size="small"
       :max-height="520"
       @selection-change="handleSelectionChange"
+      show-summary
+      :summary-method="getSummaries"
     >
       <el-table-column type="selection" width="55" align="center" fixed="left" />
       <el-table-column label="基础信息" align="center">
@@ -238,9 +240,9 @@
             />
           </el-select>
         </el-form-item>
-         <el-form-item label="工资卡号" prop="bankCardNumber">
-         <el-input v-model="form.bankCardNumber" placeholder="请输入工资卡号" />
-       </el-form-item>
+        <el-form-item label="工资卡号" prop="bankCardNumber">
+          <el-input v-model="form.bankCardNumber" placeholder="请输入工资卡号" />
+        </el-form-item>
         <el-form-item label="部门ID" prop="deptId" v-show="false">
           <el-input v-model="form.deptId" placeholder="请输入部门ID" />
         </el-form-item>
@@ -398,7 +400,7 @@
         <div class="el-upload__tip text-center" slot="tip">
           <div class="el-upload__tip" slot="tip">
             <span>仅允许导入xls、xlsx格式文件。</span>
-<!--            <el-link type="primary" :underline="false" style="font-size: 12px; vertical-align: baseline" @click="importTemplate">下载模板</el-link>-->
+            <!--            <el-link type="primary" :underline="false" style="font-size: 12px; vertical-align: baseline" @click="importTemplate">下载模板</el-link>-->
           </div>
         </div>
       </el-upload>
@@ -411,407 +413,407 @@
 </template>
 
 <script>
-import { listDetail, getDetail, delDetail, addDetail, updateDetail } from "@/api/kangderui/detail"
-import { listUser } from "@/api/system/user"
-import { listDept } from "@/api/system/dept"
-import { deptTreeSelect } from "@/api/system/user"
-import { getToken } from "@/utils/auth"
-import Treeselect from "@riophae/vue-treeselect"
-import "@riophae/vue-treeselect/dist/vue-treeselect.css"
+  import { listDetail, getDetail, delDetail, addDetail, updateDetail } from "@/api/kangderui/detail"
+  import { listUser } from "@/api/system/user"
+  import { listDept } from "@/api/system/dept"
+  import { deptTreeSelect } from "@/api/system/user"
+  import { getToken } from "@/utils/auth"
+  import Treeselect from "@riophae/vue-treeselect"
+  import "@riophae/vue-treeselect/dist/vue-treeselect.css"
 
-export default {
-  name: "Detail",
-  components: { Treeselect },
-  computed: {
-    isAdminRole() {
-      const roles = this.$store.getters.roles || []
-      const deptId = this.$store.getters.deptId
-      return roles.includes("admin") || String(deptId) === "100" || String(deptId) === "109"
-    },
-    isEdit() {
-      return this.form && this.form.salaryDetailId != null
-    }
-  },
-  data() {
-    return {
-      // 遮罩层
-      loading: true,
-      // 选中数组
-      ids: [],
-      // 非单个禁用
-      single: true,
-      // 非多个禁用
-      multiple: true,
-      // 显示搜索条件
-      showSearch: true,
-      // 总条数
-      total: 0,
-      // 员工工资明细表格数据
-      detailList: [],
-      // 弹出层标题
-      title: "",
-      // 部门树选项
-      deptOptions: [],
-      // 可用部门树选项
-      enabledDeptOptions: [],
-      // 员工下拉选项
-      userOptions: [],
-      // 搜索下拉选项
-      userSearchOptions: [],
-      deptSearchOptions: [],
-      userSearchLoading: false,
-      deptSearchLoading: false,
-      // 是否显示弹出层
-      open: false,
-      // 查询参数
-      queryParams: {
-        pageNum: 1,
-        pageSize: 10,
-        userId: null,
-        nickName: null,
-        bankCardNumber: null,
-        deptId: null,
-        deptName: null,
-        salaryPeriod: null,
-        basicSalary: null,
-        basicDailySalary: null,
-        basicWorkDays: null,
-        basicSubtotal: null,
-        allowanceFullAttendance: null,
-        allowanceSafety: null,
-        allowanceSeniority: null,
-        allowancePosition: null,
-        allowanceFloating: null,
-        allowanceConfidentiality: null,
-        allowanceTransportation: null,
-        allowanceSpecialCertificate: null,
-        allowanceHoliday: null,
-        allowancePerformance: null,
-        allowanceSafetyTraining: null,
-        allowanceOnduty: null,
-        allowanceHighTemperature:null,
-        allowanceOther: null,
-        allowanceAssessment: null,
-        overtimeDays: null,
-        overtimeAmount: null,
-        overtimeMidShiftDays: null,
-        overtimeMidShiftAmount: null,
-        overtimeNightShiftDays: null,
-        overtimeNightShiftAmount: null,
-        allowanceSubtotal: null,
-        totalEarnings: null,
-        deductionDiscipline: null,
-        deductionTax: null,
-        deductionHousingFund: null,
-        deductionInsurance: null,
-        deductionWithhold: null,
-        deductionOther: null,
-        deductionSubtotal: null,
-        netSalary: null,
+  export default {
+    name: "Detail",
+    components: { Treeselect },
+    computed: {
+      isAdminRole() {
+        const roles = this.$store.getters.roles || []
+        const deptId = this.$store.getters.deptId
+        return roles.includes("admin") || String(deptId) === "100" || String(deptId) === "109"
       },
-      // 表单参数
-      form: {},
-      // 导入参数
-      upload: {
-        // 是否显示弹出层（导入）
-        open: false,
-        // 弹出层标题（导入）
-        title: "",
-        // 是否禁用上传
-        isUploading: false,
-        // 设置上传的请求头部
-        headers: { Authorization: "Bearer " + getToken() },
-        // 上传的地址
-        url: process.env.VUE_APP_BASE_API + "/kangderui/detail/importData"
-      },
-      // 表单校验
-      rules: {
-        nickName: [
-          { required: true, message: "姓名不能为空", trigger: "blur" }
-        ],
-        deptId: [
-          { required: true, message: "部门ID不能为空", trigger: "blur" }
-        ],
+      isEdit() {
+        return this.form && this.form.salaryDetailId != null
       }
-    }
-  },
-  watch: {
-    form: {
-      handler() {
-        this.recalcFormTotals()
-      },
-      deep: true
-    }
-  },
-  created() {
-    this.getList()
-  },
-  methods: {
-    isConfirmed(row) {
-      return row && String(row.remark) === "1"
     },
-    /** 查询员工工资明细列表 */
-    getList() {
-      this.loading = true
-      listDetail(this.queryParams).then(response => {
-        this.detailList = response.rows
+    data() {
+      return {
+        // 遮罩层
+        loading: true,
+        // 选中数组
+        ids: [],
+        // 非单个禁用
+        single: true,
+        // 非多个禁用
+        multiple: true,
+        // 显示搜索条件
+        showSearch: true,
+        // 总条数
+        total: 0,
+        // 员工工资明细表格数据
+        detailList: [],
+        // 弹出层标题
+        title: "",
+        // 部门树选项
+        deptOptions: [],
+        // 可用部门树选项
+        enabledDeptOptions: [],
+        // 员工下拉选项
+        userOptions: [],
+        // 搜索下拉选项
+        userSearchOptions: [],
+        deptSearchOptions: [],
+        userSearchLoading: false,
+        deptSearchLoading: false,
+        // 是否显示弹出层
+        open: false,
+        // 查询参数
+        queryParams: {
+          pageNum: 1,
+          pageSize: 10,
+          userId: null,
+          nickName: null,
+          bankCardNumber: null,
+          deptId: null,
+          deptName: null,
+          salaryPeriod: null,
+          basicSalary: null,
+          basicDailySalary: null,
+          basicWorkDays: null,
+          basicSubtotal: null,
+          allowanceFullAttendance: null,
+          allowanceSafety: null,
+          allowanceSeniority: null,
+          allowancePosition: null,
+          allowanceFloating: null,
+          allowanceConfidentiality: null,
+          allowanceTransportation: null,
+          allowanceSpecialCertificate: null,
+          allowanceHoliday: null,
+          allowancePerformance: null,
+          allowanceSafetyTraining: null,
+          allowanceOnduty: null,
+          allowanceHighTemperature:null,
+          allowanceOther: null,
+          allowanceAssessment: null,
+          overtimeDays: null,
+          overtimeAmount: null,
+          overtimeMidShiftDays: null,
+          overtimeMidShiftAmount: null,
+          overtimeNightShiftDays: null,
+          overtimeNightShiftAmount: null,
+          allowanceSubtotal: null,
+          totalEarnings: null,
+          deductionDiscipline: null,
+          deductionTax: null,
+          deductionHousingFund: null,
+          deductionInsurance: null,
+          deductionWithhold: null,
+          deductionOther: null,
+          deductionSubtotal: null,
+          netSalary: null,
+        },
+        // 表单参数
+        form: {},
+        // 导入参数
+        upload: {
+          // 是否显示弹出层（导入）
+          open: false,
+          // 弹出层标题（导入）
+          title: "",
+          // 是否禁用上传
+          isUploading: false,
+          // 设置上传的请求头部
+          headers: { Authorization: "Bearer " + getToken() },
+          // 上传的地址
+          url: process.env.VUE_APP_BASE_API + "/kangderui/detail/importData"
+        },
+        // 表单校验
+        rules: {
+          nickName: [
+            { required: true, message: "姓名不能为空", trigger: "blur" }
+          ],
+          deptId: [
+            { required: true, message: "部门ID不能为空", trigger: "blur" }
+          ],
+        }
+      }
+    },
+    watch: {
+      form: {
+        handler() {
+          this.recalcFormTotals()
+        },
+        deep: true
+      }
+    },
+    created() {
+      this.getList()
+    },
+    methods: {
+      isConfirmed(row) {
+        return row && String(row.remark) === "1"
+      },
+      /** 查询员工工资明细列表 */
+      getList() {
+        this.loading = true
+        listDetail(this.queryParams).then(response => {
+          this.detailList = response.rows
         this.total = response.total
         this.loading = false
       }).catch(error => {
-        this.loading = false
+          this.loading = false
         this.handlePasswordRedirect(error)
       })
-    },
-    handlePasswordRedirect(error) {
-      const message = error && error.message ? error.message : error
-      if (message === "请先修改初始密码后再查看工资") {
-        this.$router.push({ name: "Profile", params: { activeTab: "resetPwd" } })
-        return true
-      }
-      return false
-    },
-    // 取消按钮
-    cancel() {
-      this.open = false
-      this.reset()
-    },
-    // 表单重置
-    reset() {
-      this.form = {
-        salaryDetailId: null,
-        userId: null,
-        nickName: null,
-        bankCardNumber: null,
-        deptId: null,
-        deptName: null,
-        salaryPeriod: null,
-        basicSalary: null,
-        basicDailySalary: null,
-        basicWorkDays: null,
-        basicSubtotal: null,
-        allowanceFullAttendance: null,
-        allowanceSafety: null,
-        allowanceSeniority: null,
-        allowancePosition: null,
-        allowanceFloating: null,
-        allowanceConfidentiality: null,
-        allowanceTransportation: null,
-        allowanceSpecialCertificate: null,
-        allowanceHoliday: null,
-        allowancePerformance: null,
-        allowanceSafetyTraining: null,
-        allowanceOnduty: null,
-        allowanceHighTemperature:null,
-        allowanceOther: null,
-        allowanceAssessment: null,
-        overtimeDays: null,
-        overtimeAmount: null,
-        overtimeMidShiftDays: null,
-        overtimeMidShiftAmount: null,
-        overtimeNightShiftDays: null,
-        overtimeNightShiftAmount: null,
-        allowanceSubtotal: null,
-        totalEarnings: null,
-        deductionDiscipline: null,
-        deductionTax: null,
-        deductionHousingFund: null,
-        deductionInsurance: null,
-        deductionWithhold: null,
-        deductionOther: null,
-        deductionSubtotal: null,
-        netSalary: null,
-        createTime: null,
-        createBy: null,
-        updateBy: null,
-        updateTime: null,
-        remark: null
-      }
-      this.resetForm("form")
-    },
-    hasValue(value) {
-      return value !== null && value !== undefined && value !== ""
-    },
-    toNumber(value) {
-      if (!this.hasValue(value)) {
-        return 0
-      }
-      const num = Number(value)
-      return Number.isNaN(num) ? 0 : num
-    },
-    calcSum(fields) {
-      return fields.reduce((sum, field) => sum + this.toNumber(this.form[field]), 0)
-    },
-    recalcFormTotals() {
-      if (!this.form) {
-        return
-      }
-      const basicSalary = this.form.basicSalary
-      const basicSubtotal = this.hasValue(basicSalary) ? this.toNumber(basicSalary) : null
+      },
+      handlePasswordRedirect(error) {
+        const message = error && error.message ? error.message : error
+        if (message === "请先修改初始密码后再查看工资") {
+          this.$router.push({ name: "Profile", params: { activeTab: "resetPwd" } })
+          return true
+        }
+        return false
+      },
+      // 取消按钮
+      cancel() {
+        this.open = false
+        this.reset()
+      },
+      // 表单重置
+      reset() {
+        this.form = {
+          salaryDetailId: null,
+          userId: null,
+          nickName: null,
+          bankCardNumber: null,
+          deptId: null,
+          deptName: null,
+          salaryPeriod: null,
+          basicSalary: null,
+          basicDailySalary: null,
+          basicWorkDays: null,
+          basicSubtotal: null,
+          allowanceFullAttendance: null,
+          allowanceSafety: null,
+          allowanceSeniority: null,
+          allowancePosition: null,
+          allowanceFloating: null,
+          allowanceConfidentiality: null,
+          allowanceTransportation: null,
+          allowanceSpecialCertificate: null,
+          allowanceHoliday: null,
+          allowancePerformance: null,
+          allowanceSafetyTraining: null,
+          allowanceOnduty: null,
+          allowanceHighTemperature:null,
+          allowanceOther: null,
+          allowanceAssessment: null,
+          overtimeDays: null,
+          overtimeAmount: null,
+          overtimeMidShiftDays: null,
+          overtimeMidShiftAmount: null,
+          overtimeNightShiftDays: null,
+          overtimeNightShiftAmount: null,
+          allowanceSubtotal: null,
+          totalEarnings: null,
+          deductionDiscipline: null,
+          deductionTax: null,
+          deductionHousingFund: null,
+          deductionInsurance: null,
+          deductionWithhold: null,
+          deductionOther: null,
+          deductionSubtotal: null,
+          netSalary: null,
+          createTime: null,
+          createBy: null,
+          updateBy: null,
+          updateTime: null,
+          remark: null
+        }
+        this.resetForm("form")
+      },
+      hasValue(value) {
+        return value !== null && value !== undefined && value !== ""
+      },
+      toNumber(value) {
+        if (!this.hasValue(value)) {
+          return 0
+        }
+        const num = Number(value)
+        return Number.isNaN(num) ? 0 : num
+      },
+      calcSum(fields) {
+        return fields.reduce((sum, field) => sum + this.toNumber(this.form[field]), 0)
+      },
+      recalcFormTotals() {
+        if (!this.form) {
+          return
+        }
+        const basicSalary = this.form.basicSalary
+        const basicSubtotal = this.hasValue(basicSalary) ? this.toNumber(basicSalary) : null
 
-      const allowanceFields = [
-        "allowanceFullAttendance",
-        "allowanceSafety",
-        "allowanceSeniority",
-        "allowancePosition",
-        "allowanceFloating",
-        "allowanceConfidentiality",
-        "allowanceTransportation",
-        "allowanceSpecialCertificate",
-        "allowanceHoliday",
-        "allowancePerformance",
-        "allowanceSafetyTraining",
-        "allowanceOnduty",
-        "allowanceHighTemperature",
-        "allowanceOther",
-        "allowanceAssessment",
-        "overtimeAmount",
-        "overtimeMidShiftAmount",
-        "overtimeNightShiftAmount"
-      ]
-      const hasAllowance = allowanceFields.some(field => this.hasValue(this.form[field]))
-      const allowanceSubtotal = hasAllowance ? this.calcSum(allowanceFields) : null
+        const allowanceFields = [
+          "allowanceFullAttendance",
+          "allowanceSafety",
+          "allowanceSeniority",
+          "allowancePosition",
+          "allowanceFloating",
+          "allowanceConfidentiality",
+          "allowanceTransportation",
+          "allowanceSpecialCertificate",
+          "allowanceHoliday",
+          "allowancePerformance",
+          "allowanceSafetyTraining",
+          "allowanceOnduty",
+          "allowanceHighTemperature",
+          "allowanceOther",
+          "allowanceAssessment",
+          "overtimeAmount",
+          "overtimeMidShiftAmount",
+          "overtimeNightShiftAmount"
+        ]
+        const hasAllowance = allowanceFields.some(field => this.hasValue(this.form[field]))
+        const allowanceSubtotal = hasAllowance ? this.calcSum(allowanceFields) : null
 
-      const deductionFields = [
-        "deductionDiscipline",
-        "deductionTax",
-        "deductionHousingFund",
-        "deductionInsurance",
-        "deductionWithhold",
-        "deductionOther"
-      ]
-      const hasDeduction = deductionFields.some(field => this.hasValue(this.form[field]))
-      const deductionSubtotal = hasDeduction ? this.calcSum(deductionFields) : null
+        const deductionFields = [
+          "deductionDiscipline",
+          "deductionTax",
+          "deductionHousingFund",
+          "deductionInsurance",
+          "deductionWithhold",
+          "deductionOther"
+        ]
+        const hasDeduction = deductionFields.some(field => this.hasValue(this.form[field]))
+        const deductionSubtotal = hasDeduction ? this.calcSum(deductionFields) : null
 
-      const hasTotalEarnings = this.hasValue(basicSubtotal) || this.hasValue(allowanceSubtotal)
-      const totalEarnings = hasTotalEarnings
-        ? this.toNumber(basicSubtotal) + this.toNumber(allowanceSubtotal)
-        : null
+        const hasTotalEarnings = this.hasValue(basicSubtotal) || this.hasValue(allowanceSubtotal)
+        const totalEarnings = hasTotalEarnings
+          ? this.toNumber(basicSubtotal) + this.toNumber(allowanceSubtotal)
+          : null
 
-      const hasNetSalary = this.hasValue(totalEarnings) || this.hasValue(deductionSubtotal)
-      const netSalary = hasNetSalary
-        ? this.toNumber(totalEarnings) - this.toNumber(deductionSubtotal)
-        : null
+        const hasNetSalary = this.hasValue(totalEarnings) || this.hasValue(deductionSubtotal)
+        const netSalary = hasNetSalary
+          ? this.toNumber(totalEarnings) - this.toNumber(deductionSubtotal)
+          : null
 
-      this.form.basicSubtotal = basicSubtotal
-      this.form.allowanceSubtotal = allowanceSubtotal
-      this.form.deductionSubtotal = deductionSubtotal
-      this.form.totalEarnings = totalEarnings
-      this.form.netSalary = netSalary
-    },
-    /** 搜索按钮操作 */
-    handleQuery() {
-      this.queryParams.pageNum = 1
-      this.getList()
-    },
-    queryUserOptions(query) {
-      if (!query) {
-        this.userSearchOptions = []
-        return
-      }
-      this.userSearchLoading = true
-      listUser({ pageNum: 1, pageSize: 20, nickName: query, status: "0" }).then(response => {
-        this.userSearchOptions = (response.rows || []).map(item => ({
+        this.form.basicSubtotal = basicSubtotal
+        this.form.allowanceSubtotal = allowanceSubtotal
+        this.form.deductionSubtotal = deductionSubtotal
+        this.form.totalEarnings = totalEarnings
+        this.form.netSalary = netSalary
+      },
+      /** 搜索按钮操作 */
+      handleQuery() {
+        this.queryParams.pageNum = 1
+        this.getList()
+      },
+      queryUserOptions(query) {
+        if (!query) {
+          this.userSearchOptions = []
+          return
+        }
+        this.userSearchLoading = true
+        listUser({ pageNum: 1, pageSize: 20, nickName: query, status: "0" }).then(response => {
+          this.userSearchOptions = (response.rows || []).map(item => ({
           userId: item.userId,
           nickName: item.nickName
         }))
         this.userSearchLoading = false
       }).catch(() => {
-        this.userSearchLoading = false
+          this.userSearchLoading = false
       })
-    },
-    clearUserSearch() {
-      this.userSearchOptions = []
-    },
-    queryDeptOptions(query) {
-      if (!query) {
-        this.deptSearchOptions = []
-        return
-      }
-      this.deptSearchLoading = true
-      listDept({ deptName: query }).then(response => {
-        this.deptSearchOptions = (response.data || []).map(item => ({
+      },
+      clearUserSearch() {
+        this.userSearchOptions = []
+      },
+      queryDeptOptions(query) {
+        if (!query) {
+          this.deptSearchOptions = []
+          return
+        }
+        this.deptSearchLoading = true
+        listDept({ deptName: query }).then(response => {
+          this.deptSearchOptions = (response.data || []).map(item => ({
           deptId: item.deptId,
           deptName: item.deptName
         }))
         this.deptSearchLoading = false
       }).catch(() => {
-        this.deptSearchLoading = false
+          this.deptSearchLoading = false
       })
-    },
-    clearDeptSearch() {
-      this.deptSearchOptions = []
-    },
-    /** 重置按钮操作 */
-    resetQuery() {
-      this.resetForm("queryForm")
-      this.handleQuery()
-    },
-    // 多选框选中数据
-    handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.salaryDetailId)
-      this.single = selection.length!==1
-      this.multiple = !selection.length
-    },
-    /** 新增按钮操作 */
-    handleAdd() {
-      this.reset()
-      const now = new Date()
-      this.form.salaryPeriod = `${now.getFullYear()}年${String(now.getMonth() + 1).padStart(2, "0")}月`
-      this.getUserOptions()
-      this.getDeptTree()
-      this.open = true
-      this.title = "添加员工工资明细"
-    },
-    /** 修改按钮操作 */
-    handleUpdate(row) {
-      this.reset()
-      const salaryDetailId = row.salaryDetailId || this.ids
-      if (!this.isAdminRole && this.isConfirmed(row)) {
-        this.$modal.msgError("该工资已确认，不能修改。")
-        return
-      }
-      getDetail(salaryDetailId).then(response => {
-        this.form = response.data
+      },
+      clearDeptSearch() {
+        this.deptSearchOptions = []
+      },
+      /** 重置按钮操作 */
+      resetQuery() {
+        this.resetForm("queryForm")
+        this.handleQuery()
+      },
+      // 多选框选中数据
+      handleSelectionChange(selection) {
+        this.ids = selection.map(item => item.salaryDetailId)
+        this.single = selection.length!==1
+        this.multiple = !selection.length
+      },
+      /** 新增按钮操作 */
+      handleAdd() {
+        this.reset()
+        const now = new Date()
+        this.form.salaryPeriod = `${now.getFullYear()}年${String(now.getMonth() + 1).padStart(2, "0")}月`
+        this.getUserOptions()
+        this.getDeptTree()
+        this.open = true
+        this.title = "添加员工工资明细"
+      },
+      /** 修改按钮操作 */
+      handleUpdate(row) {
+        this.reset()
+        const salaryDetailId = row.salaryDetailId || this.ids
+        if (!this.isAdminRole && this.isConfirmed(row)) {
+          this.$modal.msgError("该工资已确认，不能修改。")
+          return
+        }
+        getDetail(salaryDetailId).then(response => {
+          this.form = response.data
         this.getUserOptions().then(() => {
           if (this.form.userId && !this.userOptions.find(item => item.userId === this.form.userId)) {
-            this.userOptions.unshift({ userId: this.form.userId, nickName: this.form.nickName })
-          }
-        })
+          this.userOptions.unshift({ userId: this.form.userId, nickName: this.form.nickName })
+        }
+      })
         this.open = true
         this.title = "修改员工工资明细"
       }).catch(error => {
-        this.handlePasswordRedirect(error)
+          this.handlePasswordRedirect(error)
       })
-    },
-    /** 查询员工下拉列表 */
-    getUserOptions() {
-      return listUser({ pageNum: 1, pageSize: 10000, status: "0" }).then(response => {
-        this.userOptions = (response.rows || []).map(item => ({
+      },
+      /** 查询员工下拉列表 */
+      getUserOptions() {
+        return listUser({ pageNum: 1, pageSize: 10000, status: "0" }).then(response => {
+          this.userOptions = (response.rows || []).map(item => ({
           userId: item.userId,
           nickName: item.nickName,
           deptId: item.deptId || (item.dept ? item.dept.deptId : null),
           deptName: item.dept ? item.dept.deptName : null
         }))
       })
-    },
-    handleUserChange(userId) {
-      const selected = this.userOptions.find(item => item.userId === userId)
-      this.form.userId = userId || null
-      this.form.nickName = selected ? selected.nickName : null
-      this.form.deptId = selected ? selected.deptId : null
-      this.form.deptName = selected ? selected.deptName : null
-    },
-    /** 查询部门下拉树结构 */
-    getDeptTree() {
-      return deptTreeSelect().then(response => {
-        this.deptOptions = response.data || []
+      },
+      handleUserChange(userId) {
+        const selected = this.userOptions.find(item => item.userId === userId)
+        this.form.userId = userId || null
+        this.form.nickName = selected ? selected.nickName : null
+        this.form.deptId = selected ? selected.deptId : null
+        this.form.deptName = selected ? selected.deptName : null
+      },
+      /** 查询部门下拉树结构 */
+      getDeptTree() {
+        return deptTreeSelect().then(response => {
+          this.deptOptions = response.data || []
         this.enabledDeptOptions = this.filterDisabledDept(JSON.parse(JSON.stringify(this.deptOptions)))
       })
-    },
-    // 过滤禁用的部门
-    filterDisabledDept(deptList) {
-      return deptList.filter(dept => {
-        if (dept.disabled) {
+      },
+      // 过滤禁用的部门
+      filterDisabledDept(deptList) {
+        return deptList.filter(dept => {
+          if (dept.disabled) {
           return false
         }
         if (dept.children && dept.children.length) {
@@ -819,171 +821,223 @@ export default {
         }
         return true
       })
-    },
-    findDeptLabel(list, deptId) {
-      if (!list || deptId === null || deptId === undefined) {
+      },
+      findDeptLabel(list, deptId) {
+        if (!list || deptId === null || deptId === undefined) {
+          return null
+        }
+        for (const item of list) {
+          if (item.id === deptId) {
+            return item.label
+          }
+          if (item.children && item.children.length) {
+            const label = this.findDeptLabel(item.children, deptId)
+            if (label) {
+              return label
+            }
+          }
+        }
         return null
-      }
-      for (const item of list) {
-        if (item.id === deptId) {
-          return item.label
+      },
+      handleDeptChange(deptId) {
+        this.form.deptId = deptId
+        this.form.deptName = this.findDeptLabel(this.enabledDeptOptions, deptId)
+      },
+      /** 提交按钮 */
+      submitForm() {
+        if (!this.isAdminRole && this.isConfirmed(this.form)) {
+          this.$modal.msgError("该工资已确认，不能修改。")
+          return
         }
-        if (item.children && item.children.length) {
-          const label = this.findDeptLabel(item.children, deptId)
-          if (label) {
-            return label
-          }
-        }
-      }
-      return null
-    },
-    handleDeptChange(deptId) {
-      this.form.deptId = deptId
-      this.form.deptName = this.findDeptLabel(this.enabledDeptOptions, deptId)
-    },
-    /** 提交按钮 */
-    submitForm() {
-      if (!this.isAdminRole && this.isConfirmed(this.form)) {
-        this.$modal.msgError("该工资已确认，不能修改。")
-        return
-      }
-      this.$refs["form"].validate(valid => {
-        if (valid) {
-          if (this.form.salaryDetailId != null) {
-            updateDetail(this.form).then(response => {
-              this.$modal.msgSuccess("修改成功")
+        this.$refs["form"].validate(valid => {
+          if (valid) {
+            if (this.form.salaryDetailId != null) {
+              updateDetail(this.form).then(response => {
+                this.$modal.msgSuccess("修改成功")
               this.open = false
               this.getList()
             })
-          } else {
-            addDetail(this.form).then(response => {
-              this.$modal.msgSuccess("新增成功")
+            } else {
+              addDetail(this.form).then(response => {
+                this.$modal.msgSuccess("新增成功")
               this.open = false
               this.getList()
             })
+            }
           }
-        }
-      })
-    },
-    /** 删除按钮操作 */
-    handleDelete(row) {
-      const salaryDetailIds = row.salaryDetailId || this.ids
-      this.$modal.confirm('是否确认删除员工工资明细编号为"' + salaryDetailIds + '"的数据项？').then(function() {
-        return delDetail(salaryDetailIds)
-      }).then(() => {
-        this.getList()
+        })
+      },
+      /** 删除按钮操作 */
+      handleDelete(row) {
+        const salaryDetailIds = row.salaryDetailId || this.ids
+        this.$modal.confirm('是否确认删除员工工资明细编号为"' + salaryDetailIds + '"的数据项？').then(function() {
+          return delDetail(salaryDetailIds)
+        }).then(() => {
+          this.getList()
         this.$modal.msgSuccess("删除成功")
       }).catch(() => {})
-    },
-    /** 导出按钮操作 */
-    handleExport() {
-      this.download('kangderui/detail/export', {
-        ...this.queryParams
+      },
+      /** 导出按钮操作 */
+      handleExport() {
+        this.download('kangderui/detail/export', {
+          ...this.queryParams
       }, `detail_${new Date().getTime()}.xlsx`)
-    },
-    /** 导入按钮操作 */
-    handleImport() {
-      this.upload.title = "员工工资明细导入"
-      this.upload.open = true
-    },
-    /** 下载模板操作 */
-    importTemplate() {
-      this.download('kangderui/detail/importTemplate', {
-      }, `salary_detail_template_${new Date().getTime()}.xlsx`)
-    },
-    // 文件上传中处理
-    handleFileUploadProgress() {
-      this.upload.isUploading = true
-    },
-    // 文件上传成功处理
-    handleFileSuccess(response) {
-      this.upload.open = false
-      this.upload.isUploading = false
-      this.$refs.upload.clearFiles()
-      this.$alert("<div style='overflow: auto;overflow-x: hidden;max-height: 70vh;padding: 10px 20px 0;'>" + response.msg + "</div>", "导入结果", { dangerouslyUseHTMLString: true })
-      this.getList()
-    },
-    // 提交上传文件
-    submitFileForm() {
-      const file = this.$refs.upload.uploadFiles
-      if (!file || file.length === 0 || !file[0].name.toLowerCase().endsWith('.xls') && !file[0].name.toLowerCase().endsWith('.xlsx')) {
-        this.$modal.msgError("请选择后缀为 “xls”或“xlsx”的文件。")
-        return
+      },
+      /** 导入按钮操作 */
+      handleImport() {
+        this.upload.title = "员工工资明细导入"
+        this.upload.open = true
+      },
+      /** 下载模板操作 */
+      importTemplate() {
+        this.download('kangderui/detail/importTemplate', {
+        }, `salary_detail_template_${new Date().getTime()}.xlsx`)
+      },
+      // 文件上传中处理
+      handleFileUploadProgress() {
+        this.upload.isUploading = true
+      },
+      // 文件上传成功处理
+      handleFileSuccess(response) {
+        this.upload.open = false
+        this.upload.isUploading = false
+        this.$refs.upload.clearFiles()
+        this.$alert("<div style='overflow: auto;overflow-x: hidden;max-height: 70vh;padding: 10px 20px 0;'>" + response.msg + "</div>", "导入结果", { dangerouslyUseHTMLString: true })
+        this.getList()
+      },
+      // 提交上传文件
+      submitFileForm() {
+        const file = this.$refs.upload.uploadFiles
+        if (!file || file.length === 0 || !file[0].name.toLowerCase().endsWith('.xls') && !file[0].name.toLowerCase().endsWith('.xlsx')) {
+          this.$modal.msgError("请选择后缀为 “xls”或“xlsx”的文件。")
+          return
+        }
+        this.$refs.upload.submit()
+      },
+      /** 表格合计行计算 */
+      getSummaries(param) {
+        const { columns, data } = param
+        // 定义需要合计的字段列表
+        const sumFields = new Set([
+          // 基本工资模块
+          'basicSalary', 'basicDailySalary', 'basicWorkDays', 'basicSubtotal',
+          // 考核/其它应发工资模块
+          'allowanceFullAttendance', 'allowanceSafety', 'allowanceSeniority', 'allowancePosition',
+          'allowanceFloating', 'allowanceConfidentiality', 'allowanceTransportation', 'allowanceOnduty',
+          'allowanceSpecialCertificate', 'allowanceHoliday', 'allowancePerformance', 'allowanceSafetyTraining',
+          'allowanceHighTemperature', 'allowanceAssessment', 'allowanceOther', 'allowanceSubtotal',
+          // 加班模块
+          'overtimeDays', 'overtimeAmount', 'overtimeMidShiftDays', 'overtimeMidShiftAmount',
+          'overtimeNightShiftDays', 'overtimeNightShiftAmount',
+          // 应扣/代扣代缴模块
+          'deductionDiscipline', 'deductionTax', 'deductionHousingFund', 'deductionInsurance',
+          'deductionWithhold', 'deductionOther', 'deductionSubtotal',
+          // 汇总模块
+          'totalEarnings', 'netSalary'
+        ])
+
+        const sums = []
+        for (const column of columns) {
+          const prop = column.property
+          // 对于 selection 列或操作列或无 prop 的列，显示空字符串
+          if (column.type === 'selection' || !prop) {
+            sums.push('')
+            continue
+          }
+
+          // 如果该列不在合计字段列表中，显示空字符串
+          if (!sumFields.has(prop)) {
+            sums.push('')
+            continue
+          }
+          // 计算合计值
+          let total = 0
+          for (const row of data) {
+            const value = row[prop]
+            if (value !== null && value !== undefined && value !== '') {
+              const num = Number(value)
+              if (!isNaN(num)) {
+                total += num
+              }
+            }
+          }
+          // 格式化输出：保留两位小数（整数也显示两位小数，如 100.00）
+          sums.push(total.toFixed(2))
+        }
+        return sums
       }
-      this.$refs.upload.submit()
     }
   }
-}
 </script>
 
 <style scoped>
-.four-col-form {
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.four-col-form .el-form-item {
-  width: 25%;
-  min-width: 240px;
-  box-sizing: border-box;
-  margin-right: 0;
-  vertical-align: top;
-  padding: 0 8px;
-}
-
-.four-col-form .el-form-item.full-width {
-  width: 100%;
-}
-
-.four-col-form .el-form-item .el-form-item__content {
-  width: calc(100% - 90px);
-}
-
-.four-col-form .el-form-item .el-input,
-.four-col-form .el-form-item .el-textarea {
-  width: 100%;
-}
-
-.four-col-form .form-group-title {
-  font-weight: 600;
-  color: #303133;
-  padding: 10px 0 6px;
-  border-bottom: 1px solid #ebeef5;
-  margin: 6px 0 12px;
-  background: #f9fafc;
-  border-radius: 4px;
-  padding-left: 8px;
-}
-
-.four-col-form .form-group-title.full-width {
-  width: 100%;
-  flex-basis: 100%;
-  display: block;
-}
-
-@media (max-width: 1400px) {
-  .four-col-form .el-form-item {
-    width: 33.3333%;
+  .four-col-form {
+    display: flex;
+    flex-wrap: wrap;
   }
-}
 
-@media (max-width: 1100px) {
   .four-col-form .el-form-item {
-    width: 50%;
+    width: 25%;
+    min-width: 240px;
+    box-sizing: border-box;
+    margin-right: 0;
+    vertical-align: top;
+    padding: 0 8px;
   }
-}
 
-@media (max-width: 760px) {
-  .four-col-form .el-form-item {
+  .four-col-form .el-form-item.full-width {
     width: 100%;
   }
-}
 
-::v-deep .salary-detail-dialog .el-dialog__body {
-  padding: 16px 20px 8px;
-}
+  .four-col-form .el-form-item .el-form-item__content {
+    width: calc(100% - 90px);
+  }
 
-::v-deep .salary-detail-dialog .el-form-item__label {
-  color: #606266;
-}
+  .four-col-form .el-form-item .el-input,
+  .four-col-form .el-form-item .el-textarea {
+    width: 100%;
+  }
+
+  .four-col-form .form-group-title {
+    font-weight: 600;
+    color: #303133;
+    padding: 10px 0 6px;
+    border-bottom: 1px solid #ebeef5;
+    margin: 6px 0 12px;
+    background: #f9fafc;
+    border-radius: 4px;
+    padding-left: 8px;
+  }
+
+  .four-col-form .form-group-title.full-width {
+    width: 100%;
+    flex-basis: 100%;
+    display: block;
+  }
+
+  @media (max-width: 1400px) {
+    .four-col-form .el-form-item {
+      width: 33.3333%;
+    }
+  }
+
+  @media (max-width: 1100px) {
+    .four-col-form .el-form-item {
+      width: 50%;
+    }
+  }
+
+  @media (max-width: 760px) {
+    .four-col-form .el-form-item {
+      width: 100%;
+    }
+  }
+
+  ::v-deep .salary-detail-dialog .el-dialog__body {
+    padding: 16px 20px 8px;
+  }
+
+  ::v-deep .salary-detail-dialog .el-form-item__label {
+    color: #606266;
+  }
 </style>
