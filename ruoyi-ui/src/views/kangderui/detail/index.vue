@@ -126,15 +126,15 @@
       show-summary
       :summary-method="getSummaries"
     >
-      <el-table-column type="selection" width="55" align="center" fixed="left" />
+      <el-table-column type="selection" width="55" align="center"  />
       <el-table-column label="基础信息" align="center">
         <el-table-column label="主键ID" align="center" prop="salaryDetailId" v-if=false />
         <el-table-column label="员工ID" align="center" prop="userId" v-if=false />
-        <el-table-column label="姓名" align="center" prop="nickName" fixed="left" width="100" />
-        <el-table-column label="工资卡号" align="center" prop="bankCardNumber" fixed="left" width="160" show-overflow-tooltip />
+        <el-table-column label="姓名" align="center" prop="nickName"   width="100" />
+        <el-table-column label="工资卡号" align="center" prop="bankCardNumber"   width="160" show-overflow-tooltip />
         <el-table-column label="部门ID" align="center" prop="deptId" v-if=false />
-        <el-table-column label="部门名称" align="center" prop="deptName" fixed="left" width="140" show-overflow-tooltip />
-        <el-table-column label="工资所属期" align="center" prop="salaryPeriod" fixed="left" width="110" />
+        <el-table-column label="部门名称" align="center" prop="deptName"   width="140" show-overflow-tooltip />
+        <el-table-column label="工资所属期" align="center" prop="salaryPeriod"   width="110" />
         <el-table-column label="确认状态" align="center" min-width="100">
           <template slot-scope="scope">
             <span>{{ isConfirmed(scope.row) ? "已确认" : "未确认" }}</span>
@@ -915,56 +915,60 @@
         this.$refs.upload.submit()
       },
       /** 表格合计行计算 */
+      /** 表格合计行计算 */
       getSummaries(param) {
-        const { columns, data } = param
-        // 定义需要合计的字段列表
+        const { columns, data } = param;
+
+        console.log('合计行columns:', columns.map(col => ({
+          type: col.type,
+          prop: col.property,
+          label: col.label,
+          fixed: col.fixed
+        })));
+
         const sumFields = new Set([
-          // 基本工资模块
           'basicSalary', 'basicDailySalary', 'basicWorkDays', 'basicSubtotal',
-          // 考核/其它应发工资模块
           'allowanceFullAttendance', 'allowanceSafety', 'allowanceSeniority', 'allowancePosition',
           'allowanceFloating', 'allowanceConfidentiality', 'allowanceTransportation', 'allowanceOnduty',
           'allowanceSpecialCertificate', 'allowanceHoliday', 'allowancePerformance', 'allowanceSafetyTraining',
           'allowanceHighTemperature', 'allowanceAssessment', 'allowanceOther', 'allowanceSubtotal',
-          // 加班模块
           'overtimeDays', 'overtimeAmount', 'overtimeMidShiftDays', 'overtimeMidShiftAmount',
           'overtimeNightShiftDays', 'overtimeNightShiftAmount',
-          // 应扣/代扣代缴模块
           'deductionDiscipline', 'deductionTax', 'deductionHousingFund', 'deductionInsurance',
           'deductionWithhold', 'deductionOther', 'deductionSubtotal',
-          // 汇总模块
           'totalEarnings', 'netSalary'
-        ])
+        ]);
 
-        const sums = []
+        const sums = [];
         for (const column of columns) {
-          const prop = column.property
-          // 对于 selection 列或操作列或无 prop 的列，显示空字符串
+          const prop = column.property;
+          // 1. 选择列或无效列跳过（显示空）
           if (column.type === 'selection' || !prop) {
-            sums.push('')
-            continue
+            sums.push('');
+            continue;
           }
-
-          // 如果该列不在合计字段列表中，显示空字符串
+          // 2. 需要显示“合计”文字的列（可根据实际需求调整列标识）
+          if (prop === 'nickName' || column.label === '姓名') {
+            sums.push('合计');
+            continue;
+          }
+          // 3. 不在合计范围内的列显示空
           if (!sumFields.has(prop)) {
-            sums.push('')
-            continue
+            sums.push('');
+            continue;
           }
-          // 计算合计值
-          let total = 0
+          // 4. 计算合计值
+          let total = 0;
           for (const row of data) {
-            const value = row[prop]
+            const value = row[prop];
             if (value !== null && value !== undefined && value !== '') {
-              const num = Number(value)
-              if (!isNaN(num)) {
-                total += num
-              }
+              const num = Number(value);
+              if (!isNaN(num)) total += num;
             }
           }
-          // 格式化输出：保留两位小数（整数也显示两位小数，如 100.00）
-          sums.push(total.toFixed(2))
+          sums.push(total.toFixed(2));
         }
-        return sums
+        return sums;
       }
     }
   }
@@ -1040,4 +1044,6 @@
   ::v-deep .salary-detail-dialog .el-form-item__label {
     color: #606266;
   }
+
+
 </style>

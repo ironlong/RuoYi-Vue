@@ -171,7 +171,7 @@
         </div>
         <div
           class="card-section"
-          v-if="hasVisibleFields(row, ['deductionDiscipline', 'deductionTax', 'deductionHousingFund', 'deductionInsurance', 'deductionWithhold','deductionOther, 'deductionSubtotal'])"
+          v-if="hasVisibleFields(row, ['deductionDiscipline', 'deductionTax', 'deductionHousingFund', 'deductionInsurance', 'deductionWithhold','deductionOther', 'deductionSubtotal'])"
         >
           <div class="section-title">应扣/代扣代缴</div>
           <div class="kv">
