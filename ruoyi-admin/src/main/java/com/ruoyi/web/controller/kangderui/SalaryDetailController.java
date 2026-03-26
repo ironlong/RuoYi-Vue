@@ -5,7 +5,9 @@ import java.math.RoundingMode;
 import java.util.*;
 import javax.servlet.http.HttpServletResponse;
 
+import com.ruoyi.common.core.domain.entity.SysDept;
 import com.ruoyi.common.core.domain.entity.SysUser;
+import com.ruoyi.system.service.ISysDeptService;
 import com.ruoyi.system.service.ISysUserService;
 import com.ruoyi.common.exception.ServiceException;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -17,6 +19,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.xmlbeans.SystemProperties;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +59,8 @@ public class SalaryDetailController extends BaseController {
 
     @Autowired
     ISysUserService iSysUserService;
+    @Autowired
+    ISysDeptService iSysDeptService;
 
     private HashMap cells = null;//存放每列index值
     private HashMap usersMap = new HashMap();//存放所有用户
@@ -116,8 +121,13 @@ public class SalaryDetailController extends BaseController {
                 usersMap.put(users.getNickName(), users);
             }
         }
+        //部门名称
         Object deptNameValue = getExcelCellValue(file, 0, 0, 0);
+
+        //工资所属日期
         Object salaryPeriod = getExcelCellValue(file, 0, 1, 7);
+
+        //读取excel文件到hashmap
         List<SalaryDetail> detailList = parseExcelToMapList(file, 4,deptNameValue,salaryPeriod);
 //        mapToSalaryDetails(sheet, deptNameValue, salaryPeriod);
         String operName = getUsername();
@@ -218,6 +228,7 @@ public class SalaryDetailController extends BaseController {
         if(null==cells)
             cells = new HashMap<>();
         List<SalaryDetail> list=new ArrayList<>();
+        cells.put("工资卡号",1);
        cells.put("姓名",2);
         try (Workbook workbook = WorkbookFactory.create(file.getInputStream())) {
             Sheet sheet = workbook.getSheetAt(0);
@@ -226,7 +237,7 @@ public class SalaryDetailController extends BaseController {
 //            }
             Row headerRow1 = sheet.getRow(titleRowIndex-1);//主要列名称
 
-//            Row headerRow2 = sheet.getRow(titleRowIndex);//列名称2：工资卡号,日工资,工作日,天数,金额,天数,金额,天数,金额
+            Row headerRow2 = sheet.getRow(titleRowIndex);//列名称2：工资卡号,日工资,工作日,天数,金额,天数,金额,天数,金额
 //            if (headerRow2 == null) {
 //                return cells;
 //            }
@@ -247,10 +258,11 @@ public class SalaryDetailController extends BaseController {
                 }
 
                 String cellValue1=headerRow1.getCell(i).getStringCellValue();
-//                String cellValue2=headerRow2.getCell(i).getStringCellValue();
+                String cellValue2=headerRow2.getCell(i).getStringCellValue();
                 if(!isColumnHidden && null!= cellValue1 && !"".equals(cellValue1)){
                     cellValue1=cellValue1.trim();
-//                    System.out.println("j==="+i+" : "+headerRow1.getCell(i).getStringCellValue().trim());
+
+                    System.out.println("j==="+i+" : "+headerRow1.getCell(i).getStringCellValue().trim());
                     if("基本工资".equals(cellValue1)){
                         cells.put("基本工资",i);
                     }
@@ -280,8 +292,14 @@ public class SalaryDetailController extends BaseController {
                     if("交通补贴".equals(cellValue1)){
                         cells.put("交通补贴",i);
                     }
+                    if("值班补贴".equals(cellValue1)){
+                        cells.put("值班补贴",i);
+                    }
                     if("特种作业证补贴".equals(cellValue1)){
                         cells.put("特种作业证补贴",i);
+                    }
+                    if("其它应发".equals(cellValue1)){
+                        cells.put("其它应发",i);
                     }
                     if("节假日补贴".equals(cellValue1)){
                         cells.put("节假日补贴",i);
@@ -323,18 +341,22 @@ public class SalaryDetailController extends BaseController {
                     if("代扣公积金".equals(cellValue1)){
                         cells.put("代扣公积金",i);
                     }
-                    if("代扣代缴保险".equals(cellValue1)){
-                        cells.put("代扣代缴保险",i);
+                    if("代扣保险".equals(cellValue1)){
+                        cells.put("代扣保险",i);
                     }
                     if("暂扣工资".equals(cellValue1)){
                         cells.put("暂扣工资",i);
+
+                    }
+                    if("其它应扣".equals(cellValue1)){
+                        cells.put("其它应扣",i);
                         cells.put("应扣部分小计",i+1);
                         cells.put("实发金额",i+2);
                     }
                 }
-//                if (!isColumnHidden && null != cellValue2 && !"".equals(cellValue2))
-//
-//                    System.out.println("j="+i+" : "+headerRow2.getCell(i).getStringCellValue().trim());
+                if (!isColumnHidden && null != cellValue2 && !"".equals(cellValue2))
+
+                    System.out.println("j="+i+" : "+headerRow2.getCell(i).getStringCellValue().trim());
             }
 
            list = mapToSalaryDetails(  sheet,   deptNameValue,   salaryPeriod,  titleRowIndex, lastCellNum);
@@ -453,7 +475,7 @@ public class SalaryDetailController extends BaseController {
 //            rows.add(rowMap);
 
 
-                if ("合计：".equals(String.valueOf(row.getCell(0)))) {
+                if ("合计：".equals(String.valueOf(row.getCell(0)))  || "合计：".equals(String.valueOf(row.getCell(1))) || "合计：".equals(String.valueOf(row.getCell(2)))) {
                     break;
                 }
                 if (String.valueOf(row.getCell(2)).contains("制表")) {
@@ -463,16 +485,22 @@ public class SalaryDetailController extends BaseController {
                 //姓名
 //                detail.setNickName(ObjectUtils.isEmpty(rowMap.get(2)) ? null : Convert.toStr(rowMap.get(2)));
                 detail.setNickName( ObjectUtils.isEmpty(row.getCell(Convert.toInt(cells.get("姓名")))) ? null :Convert.toStr(row.getCell(Convert.toInt(cells.get("姓名")))));
+            //工资卡号
+                detail.setBankCardNumber( ObjectUtils.isEmpty(row.getCell(Convert.toInt(cells.get("工资卡号")))) ? null :Convert.toStr(row.getCell(Convert.toInt(cells.get("工资卡号")))));
 
                 if(null!=detail.getNickName()&&!"".equals(detail.getNickName())) {
 
                     if (null != usersMap) {
                         Object user=usersMap.get(detail.getNickName());
+
+
                         if(null!=user) {
                             //用户ID
                             detail.setUserId(((SysUser) user).getUserId());
                             //部门ID
                             detail.setDeptId(((SysUser) user).getDeptId());
+                            SysDept dept = iSysDeptService.selectDeptById(((SysUser) user).getDeptId());
+                            detail.setDeptName(dept.getDeptName());
                         }else{
                             logger.error("姓名："+detail.getNickName()+"不存在！");
                         }
@@ -481,14 +509,15 @@ public class SalaryDetailController extends BaseController {
                         if(null!=sysUser) {
                             detail.setUserId(sysUser.getUserId());
                             detail.setDeptId(sysUser.getDeptId());
+                            SysDept dept = iSysDeptService.selectDeptById(detail.getDeptId());
+                            detail.setDeptName(dept.getDeptName());
                         }
                     }
                 }
-                //工资卡号
-                detail.setBankCardNumber("");
+
 
                 //部门名称
-                detail.setDeptName(ObjectUtils.isEmpty(deptNameValue) ? null : Convert.toStr(deptNameValue).replace("工资计算表", "").replace("人员", ""));
+//                 detail.setDeptName(ObjectUtils.isEmpty(deptNameValue) ? null : Convert.toStr(deptNameValue).replace("工资计算表", "").replace("人员", "").replace("济宁","".replace("化工科技有限公司工资条","")));
                 //工资所属期
                 detail.setSalaryPeriod(ObjectUtils.isEmpty(salaryPeriod) ? null : Convert.toStr(salaryPeriod).replace("所属期：", ""));
                 //基本工资
@@ -502,10 +531,10 @@ public class SalaryDetailController extends BaseController {
                 detail.setBasicDailySalary(null);
             }
                 //工作日
-                detail.setBasicWorkDays( ObjectUtils.isEmpty(row.getCell(Convert.toInt(cells.get("工作日")))) ? null :Convert.toLong(row.getCell(Convert.toInt(cells.get("工作日")))));
+                detail.setBasicWorkDays( ObjectUtils.isEmpty(row.getCell(Convert.toInt(cells.get("工作日")))) ? null :Convert.toBigDecimal(row.getCell(Convert.toInt(cells.get("工作日")))));
                 //基本工资小计
             if(null!=basicSalary && 0!=basicSalary.doubleValue()) {
-                detail.setBasicSubtotal(detail.getBasicDailySalary().multiply(new BigDecimal(detail.getBasicWorkDays())));
+                detail.setBasicSubtotal(detail.getBasicDailySalary().multiply(ObjectUtils.isEmpty(detail.getBasicWorkDays())?new BigDecimal(0):detail.getBasicWorkDays()));
             }else{
                 detail.setBasicSubtotal(null);
             }
@@ -523,9 +552,14 @@ public class SalaryDetailController extends BaseController {
                 detail.setAllowanceConfidentiality( ObjectUtils.isEmpty(row.getCell(Convert.toInt(cells.get("保密工资")))) ? null :Convert.toBigDecimal(row.getCell(Convert.toInt(cells.get("保密工资")))));
                 //交通补贴
                 detail.setAllowanceTransportation( ObjectUtils.isEmpty(row.getCell(Convert.toInt(cells.get("交通补贴")))) ? null :Convert.toBigDecimal(row.getCell(Convert.toInt(cells.get("交通补贴")))));
+                //值班补贴
+                detail.setAllowanceOnduty( ObjectUtils.isEmpty(row.getCell(Convert.toInt(cells.get("值班补贴")))) ? null :Convert.toBigDecimal(row.getCell(Convert.toInt(cells.get("值班补贴")))));
                 //特种作业证补贴
                 detail.setAllowanceSpecialCertificate( ObjectUtils.isEmpty(row.getCell(Convert.toInt(cells.get("特种作业证补贴")))) ? null :Convert.toBigDecimal(row.getCell(Convert.toInt(cells.get("特种作业证补贴")))));
-                //节假日补贴
+            //其它应发
+            detail.setAllowanceOther( ObjectUtils.isEmpty(row.getCell(Convert.toInt(cells.get("其它应发")))) ? null :Convert.toBigDecimal(row.getCell(Convert.toInt(cells.get("其它应发")))));
+
+            //节假日补贴
                 detail.setAllowanceHoliday( ObjectUtils.isEmpty(row.getCell(Convert.toInt(cells.get("节假日补贴")))) ? null :Convert.toBigDecimal(row.getCell(Convert.toInt(cells.get("节假日补贴")))));
                 //工作表现奖
                 detail.setAllowancePerformance( ObjectUtils.isEmpty(row.getCell(Convert.toInt(cells.get("工作表现奖")))) ? null :Convert.toBigDecimal(row.getCell(Convert.toInt(cells.get("工作表现奖")))));
@@ -556,6 +590,7 @@ public class SalaryDetailController extends BaseController {
                          .add((ObjectUtils.isEmpty(detail.getAllowanceAssessment())?new BigDecimal(0):detail.getAllowanceAssessment()))
                            .add((ObjectUtils.isEmpty(detail.getAllowanceHighTemperature())?new BigDecimal(0):detail.getAllowanceHighTemperature()))
                             .add((ObjectUtils.isEmpty(detail.getAllowanceSafetyTraining())?new BigDecimal(0):detail.getAllowanceSafetyTraining()))
+                                .add((ObjectUtils.isEmpty(detail.getAllowanceOnduty())?new BigDecimal(0):detail.getAllowanceOnduty()))
                                .add((ObjectUtils.isEmpty(detail.getAllowancePerformance())?new BigDecimal(0):detail.getAllowancePerformance()))
                                  .add((ObjectUtils.isEmpty(detail.getAllowanceHoliday())?new BigDecimal(0):detail.getAllowanceHoliday()))
                                  .add((ObjectUtils.isEmpty(detail.getAllowanceSpecialCertificate())?new BigDecimal(0):detail.getAllowanceSpecialCertificate()))
@@ -565,6 +600,7 @@ public class SalaryDetailController extends BaseController {
                                  .add((ObjectUtils.isEmpty(detail.getAllowancePosition())?new BigDecimal(0):detail.getAllowancePosition()))
                                 .add((ObjectUtils.isEmpty(detail.getAllowanceSeniority())?new BigDecimal(0):detail.getAllowanceSeniority()))
                                  .add((ObjectUtils.isEmpty(detail.getAllowanceSafety())?new BigDecimal(0):detail.getAllowanceSafety()))
+                                .add((ObjectUtils.isEmpty(detail.getAllowanceOther())?new BigDecimal(0):detail.getAllowanceOther()))
                                  .add((ObjectUtils.isEmpty(detail.getAllowanceFullAttendance())?new BigDecimal(0):detail.getAllowanceFullAttendance()))
 
                 );
@@ -578,16 +614,19 @@ public class SalaryDetailController extends BaseController {
                 detail.setDeductionTax( ObjectUtils.isEmpty(row.getCell(Convert.toInt(cells.get("个人所得税")))) ? null :Convert.toBigDecimal(row.getCell(Convert.toInt(cells.get("个人所得税")))));
                 //代扣公积金
                 detail.setDeductionHousingFund( ObjectUtils.isEmpty(row.getCell(Convert.toInt(cells.get("代扣公积金")))) ? null :Convert.toBigDecimal(row.getCell(Convert.toInt(cells.get("代扣公积金")))));
-                //代扣代缴保险
-                detail.setDeductionInsurance( ObjectUtils.isEmpty(row.getCell(Convert.toInt(cells.get("代扣代缴保险")))) ? null :Convert.toBigDecimal(row.getCell(Convert.toInt(cells.get("代扣代缴保险")))));
+                //代扣保险
+                detail.setDeductionInsurance( ObjectUtils.isEmpty(row.getCell(Convert.toInt(cells.get("代扣保险")))) ? null :Convert.toBigDecimal(row.getCell(Convert.toInt(cells.get("代扣保险")))));
                 //暂扣工资
                 detail.setDeductionWithhold( ObjectUtils.isEmpty(row.getCell(Convert.toInt(cells.get("暂扣工资")))) ? null :Convert.toBigDecimal(row.getCell(Convert.toInt(cells.get("暂扣工资")))));
+            //其它应扣
+            detail.setDeductionOther( ObjectUtils.isEmpty(row.getCell(Convert.toInt(cells.get("其它应扣")))) ? null :Convert.toBigDecimal(row.getCell(Convert.toInt(cells.get("其它应扣")))));
                 //应扣部分小计
                 detail.setDeductionSubtotal(
                         (ObjectUtils.isEmpty(detail.getDeductionDiscipline())?new BigDecimal(0):detail.getDeductionDiscipline())
                                 .add((ObjectUtils.isEmpty(detail.getDeductionTax())?new BigDecimal(0):detail.getDeductionTax()))
                                 .add((ObjectUtils.isEmpty(detail.getDeductionHousingFund())?new BigDecimal(0):detail.getDeductionHousingFund()))
                                  .add((ObjectUtils.isEmpty(detail.getDeductionInsurance())?new BigDecimal(0):detail.getDeductionInsurance()))
+                                .add((ObjectUtils.isEmpty(detail.getDeductionOther())?new BigDecimal(0):detail.getDeductionOther()))
                                 .add((ObjectUtils.isEmpty(detail.getDeductionWithhold())?new BigDecimal(0):detail.getDeductionWithhold()))
 
                 );

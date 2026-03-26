@@ -129,7 +129,7 @@
         <el-table-column label="主键ID" align="center" prop="salaryDetailId" v-if=false />
         <el-table-column label="员工ID" align="center" prop="userId" v-if=false />
         <el-table-column label="姓名" align="center" prop="nickName" fixed="left" width="100" />
-<!--        <el-table-column label="工资卡号" align="center" prop="bankCardNumber" fixed="left" width="160" show-overflow-tooltip />-->
+        <el-table-column label="工资卡号" align="center" prop="bankCardNumber" fixed="left" width="160" show-overflow-tooltip />
         <el-table-column label="部门ID" align="center" prop="deptId" v-if=false />
         <el-table-column label="部门名称" align="center" prop="deptName" fixed="left" width="140" show-overflow-tooltip />
         <el-table-column label="工资所属期" align="center" prop="salaryPeriod" fixed="left" width="110" />
@@ -145,7 +145,7 @@
         <el-table-column label="工作日" align="center" prop="basicWorkDays" />
         <el-table-column label="基本工资小计" align="center" prop="basicSubtotal" />
       </el-table-column>
-      <el-table-column label="补贴奖金" align="center">
+      <el-table-column label="考核/其它应发工资" align="center">
         <el-table-column label="全勤奖" align="center" prop="allowanceFullAttendance" />
         <el-table-column label="安全奖" align="center" prop="allowanceSafety" />
         <el-table-column label="工龄工资" align="center" prop="allowanceSeniority" />
@@ -153,12 +153,14 @@
         <el-table-column label="浮动工资" align="center" prop="allowanceFloating" />
         <el-table-column label="保密工资" align="center" prop="allowanceConfidentiality" />
         <el-table-column label="交通补贴" align="center" prop="allowanceTransportation" />
+        <el-table-column label="值班补贴" align="center" prop="allowanceOnduty" />
         <el-table-column label="特种作业证补贴" align="center" prop="allowanceSpecialCertificate" />
         <el-table-column label="节假日补贴" align="center" prop="allowanceHoliday" />
         <el-table-column label="工作表现奖" align="center" prop="allowancePerformance" />
         <el-table-column label="安全培训补贴" align="center" prop="allowanceSafetyTraining" />
         <el-table-column label="高温费补贴" align="center" prop="allowanceHighTemperature" />
         <el-table-column label="绩效考核奖" align="center" prop="allowanceAssessment" />
+        <el-table-column label="其它应发" align="center" prop="allowanceOther" />
         <el-table-column label="其它应发小计" align="center" prop="allowanceSubtotal" />
       </el-table-column>
       <el-table-column label="加班" align="center">
@@ -169,12 +171,13 @@
         <el-table-column label="夜班天数" align="center" prop="overtimeNightShiftDays" />
         <el-table-column label="夜班补贴金额" align="center" prop="overtimeNightShiftAmount" />
       </el-table-column>
-      <el-table-column label="扣款" align="center">
+      <el-table-column label="应扣/代扣代缴" align="center">
         <el-table-column label="违纪扣款" align="center" prop="deductionDiscipline" />
         <el-table-column label="个人所得税" align="center" prop="deductionTax" />
         <el-table-column label="代扣公积金" align="center" prop="deductionHousingFund" />
-        <el-table-column label="代扣代缴保险" align="center" prop="deductionInsurance" />
+        <el-table-column label="代扣保险" align="center" prop="deductionInsurance" />
         <el-table-column label="暂扣工资" align="center" prop="deductionWithhold" />
+        <el-table-column label="其它应扣" align="center" prop="deductionOther" />
         <el-table-column label="应扣小计" align="center" prop="deductionSubtotal" />
       </el-table-column>
       <el-table-column label="汇总" align="center">
@@ -235,9 +238,9 @@
             />
           </el-select>
         </el-form-item>
-<!--        <el-form-item label="工资卡号" prop="bankCardNumber">-->
-<!--          <el-input v-model="form.bankCardNumber" placeholder="请输入工资卡号" />-->
-<!--        </el-form-item>-->
+         <el-form-item label="工资卡号" prop="bankCardNumber">
+         <el-input v-model="form.bankCardNumber" placeholder="请输入工资卡号" />
+       </el-form-item>
         <el-form-item label="部门ID" prop="deptId" v-show="false">
           <el-input v-model="form.deptId" placeholder="请输入部门ID" />
         </el-form-item>
@@ -268,7 +271,7 @@
         <el-form-item label="基本工资小计" prop="basicSubtotal" label-width="110px">
           <el-input v-model="form.basicSubtotal" placeholder="请输入基本工资小计" :disabled="true" />
         </el-form-item>
-        <div class="form-group-title full-width">补贴奖金</div>
+        <div class="form-group-title full-width">考核/其它应发工资</div>
         <el-form-item label="全勤奖" prop="allowanceFullAttendance">
           <el-input v-model="form.allowanceFullAttendance" placeholder="请输入全勤奖" />
         </el-form-item>
@@ -290,6 +293,9 @@
         <el-form-item label="交通补贴" prop="allowanceTransportation">
           <el-input v-model="form.allowanceTransportation" placeholder="请输入交通补贴" />
         </el-form-item>
+        <el-form-item label="值班补贴" prop="allowanceOnduty">
+          <el-input v-model="form.allowanceOnduty" placeholder="请输入值班补贴" />
+        </el-form-item>
         <el-form-item label="特种作业证补贴" prop="allowanceSpecialCertificate" label-width="110px">
           <el-input v-model="form.allowanceSpecialCertificate" placeholder="请输入特种作业证补贴" />
         </el-form-item>
@@ -307,6 +313,9 @@
         </el-form-item>
         <el-form-item label="绩效考核奖" prop="allowanceAssessment">
           <el-input v-model="form.allowanceAssessment" placeholder="请输入绩效考核奖" />
+        </el-form-item>
+        <el-form-item label="其它应发" prop="allowanceOther">
+          <el-input v-model="form.allowanceOther" placeholder="请输入其它应发" />
         </el-form-item>
         <div class="form-group-title full-width">加班</div>
         <el-form-item label="加班天数" prop="overtimeDays">
@@ -334,7 +343,7 @@
         <el-form-item label="应发金额" prop="totalEarnings">
           <el-input v-model="form.totalEarnings" placeholder="请输入应发金额" :disabled="true" />
         </el-form-item>
-        <div class="form-group-title full-width">扣款</div>
+        <div class="form-group-title full-width">应扣/代扣代缴</div>
         <el-form-item label="违纪扣款" prop="deductionDiscipline">
           <el-input v-model="form.deductionDiscipline" placeholder="请输入违纪扣款" />
         </el-form-item>
@@ -344,11 +353,14 @@
         <el-form-item label="代扣公积金" prop="deductionHousingFund">
           <el-input v-model="form.deductionHousingFund" placeholder="请输入代扣公积金" />
         </el-form-item>
-        <el-form-item label="代扣代缴保险" prop="deductionInsurance" label-width="110px">
-          <el-input v-model="form.deductionInsurance" placeholder="请输入代扣代缴保险" />
+        <el-form-item label="代扣保险" prop="deductionInsurance" label-width="110px">
+          <el-input v-model="form.deductionInsurance" placeholder="请输入代扣保险" />
         </el-form-item>
         <el-form-item label="暂扣工资" prop="deductionWithhold">
           <el-input v-model="form.deductionWithhold" placeholder="请输入暂扣工资" />
+        </el-form-item>
+        <el-form-item label="其它应扣" prop="deductionOther">
+          <el-input v-model="form.deductionOther" placeholder="请输入其它应扣" />
         </el-form-item>
         <el-form-item label="应扣小计" prop="deductionSubtotal">
           <el-input v-model="form.deductionSubtotal" placeholder="请输入应扣小计" :disabled="true" />
@@ -476,7 +488,9 @@ export default {
         allowanceHoliday: null,
         allowancePerformance: null,
         allowanceSafetyTraining: null,
+        allowanceOnduty: null,
         allowanceHighTemperature:null,
+        allowanceOther: null,
         allowanceAssessment: null,
         overtimeDays: null,
         overtimeAmount: null,
@@ -491,6 +505,7 @@ export default {
         deductionHousingFund: null,
         deductionInsurance: null,
         deductionWithhold: null,
+        deductionOther: null,
         deductionSubtotal: null,
         netSalary: null,
       },
@@ -585,7 +600,9 @@ export default {
         allowanceHoliday: null,
         allowancePerformance: null,
         allowanceSafetyTraining: null,
+        allowanceOnduty: null,
         allowanceHighTemperature:null,
+        allowanceOther: null,
         allowanceAssessment: null,
         overtimeDays: null,
         overtimeAmount: null,
@@ -600,6 +617,7 @@ export default {
         deductionHousingFund: null,
         deductionInsurance: null,
         deductionWithhold: null,
+        deductionOther: null,
         deductionSubtotal: null,
         netSalary: null,
         createTime: null,
@@ -642,7 +660,9 @@ export default {
         "allowanceHoliday",
         "allowancePerformance",
         "allowanceSafetyTraining",
+        "allowanceOnduty",
         "allowanceHighTemperature",
+        "allowanceOther",
         "allowanceAssessment",
         "overtimeAmount",
         "overtimeMidShiftAmount",
@@ -656,7 +676,8 @@ export default {
         "deductionTax",
         "deductionHousingFund",
         "deductionInsurance",
-        "deductionWithhold"
+        "deductionWithhold",
+        "deductionOther"
       ]
       const hasDeduction = deductionFields.some(field => this.hasValue(this.form[field]))
       const deductionSubtotal = hasDeduction ? this.calcSum(deductionFields) : null

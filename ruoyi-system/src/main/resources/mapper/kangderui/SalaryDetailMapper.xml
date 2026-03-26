@@ -24,11 +24,13 @@
         <result property="allowanceConfidentiality"    column="allowance_confidentiality"    />
         <result property="allowanceTransportation"    column="allowance_transportation"    />
         <result property="allowanceSpecialCertificate"    column="allowance_special_certificate"    />
-        <result property="allowanceHoliday"    column="allowance_holiday"    />
         <result property="allowancePerformance"    column="allowance_performance"    />
+        <result property="allowanceHoliday"    column="allowance_holiday"    />
         <result property="allowanceSafetyTraining"    column="allowance_safety_training"    />
-        <result property="allowanceAssessment"    column="allowance_assessment"    />
+        <result property="allowanceOther"    column="allowance_other"    />
+        <result property="allowanceOnduty"    column="allowance_onduty"    />
         <result property="allowanceHighTemperature"    column="allowance_high_temperature"    />
+        <result property="allowanceAssessment"    column="allowance_assessment"    />
         <result property="overtimeDays"    column="overtime_days"    />
         <result property="overtimeAmount"    column="overtime_amount"    />
         <result property="overtimeMidShiftDays"    column="overtime_mid_shift_days"    />
@@ -43,6 +45,7 @@
         <result property="deductionInsurance"    column="deduction_insurance"    />
         <result property="deductionWithhold"    column="deduction_withhold"    />
         <result property="deductionSubtotal"    column="deduction_subtotal"    />
+        <result property="deductionOther"    column="deduction_other"    />
         <result property="netSalary"    column="net_salary"    />
         <result property="createTime"    column="create_time"    />
         <result property="createBy"    column="create_by"    />
@@ -52,7 +55,7 @@
     </resultMap>
 
     <sql id="selectSalaryDetailVo">
-        select salary_detail_id, user_id, nick_name, bank_card_number, dept_id, dept_name, salary_period, basic_salary, basic_daily_salary, basic_work_days, basic_subtotal, allowance_full_attendance, allowance_safety, allowance_seniority, allowance_position, allowance_floating, allowance_confidentiality, allowance_transportation, allowance_special_certificate, allowance_holiday, allowance_performance, allowance_safety_training, allowance_assessment, allowance_high_temperature, overtime_days, overtime_amount, overtime_mid_shift_days, overtime_mid_shift_amount, overtime_night_shift_days, overtime_night_shift_amount, allowance_subtotal, total_earnings, deduction_discipline, deduction_tax, deduction_housing_fund, deduction_insurance, deduction_withhold, deduction_subtotal, net_salary, create_time, create_by, update_by, update_time, remark from salary_detail
+        select salary_detail_id, user_id, nick_name, bank_card_number, dept_id, dept_name, salary_period, basic_salary, basic_daily_salary, basic_work_days, basic_subtotal, allowance_full_attendance, allowance_safety, allowance_seniority, allowance_position, allowance_floating, allowance_confidentiality, allowance_transportation, allowance_special_certificate, allowance_performance, allowance_holiday, allowance_safety_training, allowance_other, allowance_onduty, allowance_high_temperature, allowance_assessment, overtime_days, overtime_amount, overtime_mid_shift_days, overtime_mid_shift_amount, overtime_night_shift_days, overtime_night_shift_amount, allowance_subtotal, total_earnings, deduction_discipline, deduction_tax, deduction_housing_fund, deduction_insurance, deduction_withhold, deduction_subtotal, deduction_other, net_salary, create_time, create_by, update_by, update_time, remark from salary_detail
     </sql>
 
     <select id="selectSalaryDetailList" parameterType="SalaryDetail" resultMap="SalaryDetailResult">
@@ -76,11 +79,13 @@
             <if test="allowanceConfidentiality != null "> and allowance_confidentiality = #{allowanceConfidentiality}</if>
             <if test="allowanceTransportation != null "> and allowance_transportation = #{allowanceTransportation}</if>
             <if test="allowanceSpecialCertificate != null "> and allowance_special_certificate = #{allowanceSpecialCertificate}</if>
-            <if test="allowanceHoliday != null "> and allowance_holiday = #{allowanceHoliday}</if>
             <if test="allowancePerformance != null "> and allowance_performance = #{allowancePerformance}</if>
+            <if test="allowanceHoliday != null "> and allowance_holiday = #{allowanceHoliday}</if>
             <if test="allowanceSafetyTraining != null "> and allowance_safety_training = #{allowanceSafetyTraining}</if>
-            <if test="allowanceAssessment != null "> and allowance_assessment = #{allowanceAssessment}</if>
+            <if test="allowanceOther != null "> and allowance_other = #{allowanceOther}</if>
+            <if test="allowanceOnduty != null "> and allowance_onduty = #{allowanceOnduty}</if>
             <if test="allowanceHighTemperature != null "> and allowance_high_temperature = #{allowanceHighTemperature}</if>
+            <if test="allowanceAssessment != null "> and allowance_assessment = #{allowanceAssessment}</if>
             <if test="overtimeDays != null "> and overtime_days = #{overtimeDays}</if>
             <if test="overtimeAmount != null "> and overtime_amount = #{overtimeAmount}</if>
             <if test="overtimeMidShiftDays != null "> and overtime_mid_shift_days = #{overtimeMidShiftDays}</if>
@@ -95,6 +100,7 @@
             <if test="deductionInsurance != null "> and deduction_insurance = #{deductionInsurance}</if>
             <if test="deductionWithhold != null "> and deduction_withhold = #{deductionWithhold}</if>
             <if test="deductionSubtotal != null "> and deduction_subtotal = #{deductionSubtotal}</if>
+            <if test="deductionOther != null "> and deduction_other = #{deductionOther}</if>
             <if test="netSalary != null "> and net_salary = #{netSalary}</if>
         </where>
         order by (case when remark = '1' then 1 else 0 end) asc, salary_detail_id desc
@@ -126,11 +132,13 @@
             <if test="allowanceConfidentiality != null">allowance_confidentiality,</if>
             <if test="allowanceTransportation != null">allowance_transportation,</if>
             <if test="allowanceSpecialCertificate != null">allowance_special_certificate,</if>
-            <if test="allowanceHoliday != null">allowance_holiday,</if>
             <if test="allowancePerformance != null">allowance_performance,</if>
+            <if test="allowanceHoliday != null">allowance_holiday,</if>
             <if test="allowanceSafetyTraining != null">allowance_safety_training,</if>
-            <if test="allowanceAssessment != null">allowance_assessment,</if>
+            <if test="allowanceOther != null">allowance_other,</if>
+            <if test="allowanceOnduty != null">allowance_onduty,</if>
             <if test="allowanceHighTemperature != null">allowance_high_temperature,</if>
+            <if test="allowanceAssessment != null">allowance_assessment,</if>
             <if test="overtimeDays != null">overtime_days,</if>
             <if test="overtimeAmount != null">overtime_amount,</if>
             <if test="overtimeMidShiftDays != null">overtime_mid_shift_days,</if>
@@ -145,6 +153,7 @@
             <if test="deductionInsurance != null">deduction_insurance,</if>
             <if test="deductionWithhold != null">deduction_withhold,</if>
             <if test="deductionSubtotal != null">deduction_subtotal,</if>
+            <if test="deductionOther != null">deduction_other,</if>
             <if test="netSalary != null">net_salary,</if>
             <if test="createTime != null">create_time,</if>
             <if test="createBy != null">create_by,</if>
@@ -171,11 +180,13 @@
             <if test="allowanceConfidentiality != null">#{allowanceConfidentiality},</if>
             <if test="allowanceTransportation != null">#{allowanceTransportation},</if>
             <if test="allowanceSpecialCertificate != null">#{allowanceSpecialCertificate},</if>
-            <if test="allowanceHoliday != null">#{allowanceHoliday},</if>
             <if test="allowancePerformance != null">#{allowancePerformance},</if>
+            <if test="allowanceHoliday != null">#{allowanceHoliday},</if>
             <if test="allowanceSafetyTraining != null">#{allowanceSafetyTraining},</if>
-            <if test="allowanceAssessment != null">#{allowanceAssessment},</if>
+            <if test="allowanceOther != null">#{allowanceOther},</if>
+            <if test="allowanceOnduty != null">#{allowanceOnduty},</if>
             <if test="allowanceHighTemperature != null">#{allowanceHighTemperature},</if>
+            <if test="allowanceAssessment != null">#{allowanceAssessment},</if>
             <if test="overtimeDays != null">#{overtimeDays},</if>
             <if test="overtimeAmount != null">#{overtimeAmount},</if>
             <if test="overtimeMidShiftDays != null">#{overtimeMidShiftDays},</if>
@@ -190,6 +201,7 @@
             <if test="deductionInsurance != null">#{deductionInsurance},</if>
             <if test="deductionWithhold != null">#{deductionWithhold},</if>
             <if test="deductionSubtotal != null">#{deductionSubtotal},</if>
+            <if test="deductionOther != null">#{deductionOther},</if>
             <if test="netSalary != null">#{netSalary},</if>
             <if test="createTime != null">#{createTime},</if>
             <if test="createBy != null">#{createBy},</if>
@@ -220,11 +232,13 @@
             <if test="allowanceConfidentiality != null">allowance_confidentiality = #{allowanceConfidentiality},</if>
             <if test="allowanceTransportation != null">allowance_transportation = #{allowanceTransportation},</if>
             <if test="allowanceSpecialCertificate != null">allowance_special_certificate = #{allowanceSpecialCertificate},</if>
-            <if test="allowanceHoliday != null">allowance_holiday = #{allowanceHoliday},</if>
             <if test="allowancePerformance != null">allowance_performance = #{allowancePerformance},</if>
+            <if test="allowanceHoliday != null">allowance_holiday = #{allowanceHoliday},</if>
             <if test="allowanceSafetyTraining != null">allowance_safety_training = #{allowanceSafetyTraining},</if>
-            <if test="allowanceAssessment != null">allowance_assessment = #{allowanceAssessment},</if>
+            <if test="allowanceOther != null">allowance_other = #{allowanceOther},</if>
+            <if test="allowanceOnduty != null">allowance_onduty = #{allowanceOnduty},</if>
             <if test="allowanceHighTemperature != null">allowance_high_temperature = #{allowanceHighTemperature},</if>
+            <if test="allowanceAssessment != null">allowance_assessment = #{allowanceAssessment},</if>
             <if test="overtimeDays != null">overtime_days = #{overtimeDays},</if>
             <if test="overtimeAmount != null">overtime_amount = #{overtimeAmount},</if>
             <if test="overtimeMidShiftDays != null">overtime_mid_shift_days = #{overtimeMidShiftDays},</if>
@@ -239,6 +253,7 @@
             <if test="deductionInsurance != null">deduction_insurance = #{deductionInsurance},</if>
             <if test="deductionWithhold != null">deduction_withhold = #{deductionWithhold},</if>
             <if test="deductionSubtotal != null">deduction_subtotal = #{deductionSubtotal},</if>
+            <if test="deductionOther != null">deduction_other = #{deductionOther},</if>
             <if test="netSalary != null">net_salary = #{netSalary},</if>
             <if test="createTime != null">create_time = #{createTime},</if>
             <if test="createBy != null">create_by = #{createBy},</if>

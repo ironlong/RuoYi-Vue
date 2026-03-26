@@ -67,9 +67,9 @@
         </div>
         <div
           class="card-section"
-          v-if="hasVisibleFields(row, ['allowanceFullAttendance', 'allowanceSafety', 'allowanceSeniority', 'allowancePosition', 'allowanceFloating', 'allowanceConfidentiality', 'allowanceTransportation', 'allowanceSpecialCertificate', 'allowanceHoliday', 'allowancePerformance', 'allowanceSafetyTraining', 'allowanceAssessment', 'allowanceSubtotal'])"
+          v-if="hasVisibleFields(row, ['allowanceFullAttendance', 'allowanceSafety', 'allowanceSeniority', 'allowancePosition', 'allowanceFloating', 'allowanceConfidentiality', 'allowanceTransportation','allowanceOnduty', 'allowanceSpecialCertificate', 'allowanceHoliday', 'allowancePerformance', 'allowanceSafetyTraining', 'allowanceAssessment', 'allowanceOther', 'allowanceSubtotal'])"
         >
-          <div class="section-title">补贴奖金</div>
+          <div class="section-title">考核/其它应发工资</div>
           <div class="kv">
             <div class="kv-item" v-if="shouldShowField(row, 'allowanceFullAttendance')">
               <span class="label">全勤奖</span>
@@ -99,6 +99,10 @@
               <span class="label">交通补贴</span>
               <span class="value">{{ row.allowanceTransportation }}</span>
             </div>
+            <div class="kv-item" v-if="shouldShowField(row, 'allowanceOnduty')">
+              <span class="label">值班补贴</span>
+              <span class="value">{{ row.allowanceOnduty }}</span>
+            </div>
             <div class="kv-item" v-if="shouldShowField(row, 'allowanceSpecialCertificate')">
               <span class="label">特种作业证补贴</span>
               <span class="value">{{ row.allowanceSpecialCertificate }}</span>
@@ -122,6 +126,10 @@
             <div class="kv-item" v-if="shouldShowField(row, 'allowanceAssessment')">
               <span class="label">绩效考核奖</span>
               <span class="value">{{ row.allowanceAssessment }}</span>
+            </div>
+            <div class="kv-item" v-if="shouldShowField(row, 'allowanceOther')">
+              <span class="label">其它应发</span>
+              <span class="value">{{ row.allowanceOther }}</span>
             </div>
             <div class="kv-item" v-if="shouldShowField(row, 'allowanceSubtotal')">
               <span class="label">其它应发小计</span>
@@ -163,9 +171,9 @@
         </div>
         <div
           class="card-section"
-          v-if="hasVisibleFields(row, ['deductionDiscipline', 'deductionTax', 'deductionHousingFund', 'deductionInsurance', 'deductionWithhold', 'deductionSubtotal'])"
+          v-if="hasVisibleFields(row, ['deductionDiscipline', 'deductionTax', 'deductionHousingFund', 'deductionInsurance', 'deductionWithhold','deductionOther, 'deductionSubtotal'])"
         >
-          <div class="section-title">扣款</div>
+          <div class="section-title">应扣/代扣代缴</div>
           <div class="kv">
             <div class="kv-item" v-if="shouldShowField(row, 'deductionDiscipline')">
               <span class="label">违纪扣款</span>
@@ -180,12 +188,16 @@
               <span class="value">{{ row.deductionHousingFund }}</span>
             </div>
             <div class="kv-item" v-if="shouldShowField(row, 'deductionInsurance')">
-              <span class="label">代扣代缴保险</span>
+              <span class="label">代扣保险</span>
               <span class="value">{{ row.deductionInsurance }}</span>
             </div>
             <div class="kv-item" v-if="shouldShowField(row, 'deductionWithhold')">
               <span class="label">暂扣工资</span>
               <span class="value">{{ row.deductionWithhold }}</span>
+            </div>
+            <div class="kv-item" v-if="shouldShowField(row, 'deductionOther')">
+              <span class="label">其它应扣</span>
+              <span class="value">{{ row.deductionOther }}</span>
             </div>
             <div class="kv-item" v-if="shouldShowField(row, 'deductionSubtotal')">
               <span class="label">应扣小计</span>
@@ -232,7 +244,7 @@
         <el-table-column label="工作日" align="center" prop="basicWorkDays" />
         <el-table-column label="基本工资小计" align="center" prop="basicSubtotal" />
       </el-table-column>
-      <el-table-column label="补贴奖金" align="center">
+      <el-table-column label="考核/其它应发工资" align="center">
         <el-table-column label="全勤奖" align="center" prop="allowanceFullAttendance" />
         <el-table-column label="安全奖" align="center" prop="allowanceSafety" />
         <el-table-column label="工龄工资" align="center" prop="allowanceSeniority" />
@@ -240,12 +252,14 @@
         <el-table-column label="浮动工资" align="center" prop="allowanceFloating" />
         <el-table-column label="保密工资" align="center" prop="allowanceConfidentiality" />
         <el-table-column label="交通补贴" align="center" prop="allowanceTransportation" />
+        <el-table-column label="值班补贴" align="center" prop="allowanceOnduty" />
         <el-table-column label="特种作业证补贴" align="center" prop="allowanceSpecialCertificate" />
         <el-table-column label="节假日补贴" align="center" prop="allowanceHoliday" />
         <el-table-column label="工作表现奖" align="center" prop="allowancePerformance" />
         <el-table-column label="安全培训补贴" align="center" prop="allowanceSafetyTraining" />
         <el-table-column label="高温费补贴" align="center" prop="allowanceHighTemperature" />
         <el-table-column label="绩效考核奖" align="center" prop="allowanceAssessment" />
+        <el-table-column label="其它应发" align="center" prop="allowanceOther" />
         <el-table-column label="其它应发小计" align="center" prop="allowanceSubtotal" />
       </el-table-column>
       <el-table-column label="加班" align="center">
@@ -256,12 +270,13 @@
         <el-table-column label="夜班天数" align="center" prop="overtimeNightShiftDays" />
         <el-table-column label="夜班补贴金额" align="center" prop="overtimeNightShiftAmount" />
       </el-table-column>
-      <el-table-column label="扣款" align="center">
+      <el-table-column label="应扣/代扣代缴" align="center">
         <el-table-column label="违纪扣款" align="center" prop="deductionDiscipline" />
         <el-table-column label="个人所得税" align="center" prop="deductionTax" />
         <el-table-column label="代扣公积金" align="center" prop="deductionHousingFund" />
-        <el-table-column label="代扣代缴保险" align="center" prop="deductionInsurance" />
+        <el-table-column label="代扣保险" align="center" prop="deductionInsurance" />
         <el-table-column label="暂扣工资" align="center" prop="deductionWithhold" />
+        <el-table-column label="其它应扣" align="center" prop="deductionOther" />
         <el-table-column label="应扣小计" align="center" prop="deductionSubtotal" />
       </el-table-column>
       <el-table-column label="汇总" align="center">

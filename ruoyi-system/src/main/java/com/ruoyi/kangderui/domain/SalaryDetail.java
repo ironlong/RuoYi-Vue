@@ -10,7 +10,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
  * 员工工资明细对象 salary_detail
  *
  * @author ruoyi
- * @date 2026-02-26
+ * @date 2026-03-26
  */
 public class SalaryDetail extends BaseEntity
 {
@@ -53,7 +53,7 @@ public class SalaryDetail extends BaseEntity
 
     /** 工作日 */
     @Excel(name = "工作日")
-    private Long basicWorkDays;
+    private BigDecimal basicWorkDays;
 
     /** 基本工资小计 */
     @Excel(name = "基本工资小计")
@@ -91,25 +91,33 @@ public class SalaryDetail extends BaseEntity
     @Excel(name = "特种作业证补贴")
     private BigDecimal allowanceSpecialCertificate;
 
-    /** 节假日补贴 */
-    @Excel(name = "节假日补贴")
-    private BigDecimal allowanceHoliday;
-
     /** 工作表现奖 */
     @Excel(name = "工作表现奖")
     private BigDecimal allowancePerformance;
+
+    /** 节假日补贴 */
+    @Excel(name = "节假日补贴")
+    private BigDecimal allowanceHoliday;
 
     /** 安全培训补贴 */
     @Excel(name = "安全培训补贴")
     private BigDecimal allowanceSafetyTraining;
 
-    /** 绩效考核奖 */
-    @Excel(name = "绩效考核奖")
-    private BigDecimal allowanceAssessment;
+    /** 其它应发 */
+    @Excel(name = "其它应发")
+    private BigDecimal allowanceOther;
+
+    /** 值日补贴 */
+    @Excel(name = "值日补贴")
+    private BigDecimal allowanceOnduty;
 
     /** 高温费补贴 */
     @Excel(name = "高温费补贴")
     private BigDecimal allowanceHighTemperature;
+
+    /** 绩效考核奖 */
+    @Excel(name = "绩效考核奖")
+    private BigDecimal allowanceAssessment;
 
     /** 加班天数 */
     @Excel(name = "加班天数")
@@ -166,6 +174,10 @@ public class SalaryDetail extends BaseEntity
     /** 应扣小计 */
     @Excel(name = "应扣小计")
     private BigDecimal deductionSubtotal;
+
+    /** 其它应扣 */
+    @Excel(name = "其它应扣")
+    private BigDecimal deductionOther;
 
     /** 实发金额 */
     @Excel(name = "实发金额")
@@ -261,12 +273,12 @@ public class SalaryDetail extends BaseEntity
         return basicDailySalary;
     }
 
-    public void setBasicWorkDays(Long basicWorkDays)
+    public void setBasicWorkDays(BigDecimal basicWorkDays)
     {
         this.basicWorkDays = basicWorkDays;
     }
 
-    public Long getBasicWorkDays()
+    public BigDecimal getBasicWorkDays()
     {
         return basicWorkDays;
     }
@@ -361,16 +373,6 @@ public class SalaryDetail extends BaseEntity
         return allowanceSpecialCertificate;
     }
 
-    public void setAllowanceHoliday(BigDecimal allowanceHoliday)
-    {
-        this.allowanceHoliday = allowanceHoliday;
-    }
-
-    public BigDecimal getAllowanceHoliday()
-    {
-        return allowanceHoliday;
-    }
-
     public void setAllowancePerformance(BigDecimal allowancePerformance)
     {
         this.allowancePerformance = allowancePerformance;
@@ -379,6 +381,16 @@ public class SalaryDetail extends BaseEntity
     public BigDecimal getAllowancePerformance()
     {
         return allowancePerformance;
+    }
+
+    public void setAllowanceHoliday(BigDecimal allowanceHoliday)
+    {
+        this.allowanceHoliday = allowanceHoliday;
+    }
+
+    public BigDecimal getAllowanceHoliday()
+    {
+        return allowanceHoliday;
     }
 
     public void setAllowanceSafetyTraining(BigDecimal allowanceSafetyTraining)
@@ -391,14 +403,24 @@ public class SalaryDetail extends BaseEntity
         return allowanceSafetyTraining;
     }
 
-    public void setAllowanceAssessment(BigDecimal allowanceAssessment)
+    public void setAllowanceOther(BigDecimal allowanceOther)
     {
-        this.allowanceAssessment = allowanceAssessment;
+        this.allowanceOther = allowanceOther;
     }
 
-    public BigDecimal getAllowanceAssessment()
+    public BigDecimal getAllowanceOther()
     {
-        return allowanceAssessment;
+        return allowanceOther;
+    }
+
+    public void setAllowanceOnduty(BigDecimal allowanceOnduty)
+    {
+        this.allowanceOnduty = allowanceOnduty;
+    }
+
+    public BigDecimal getAllowanceOnduty()
+    {
+        return allowanceOnduty;
     }
 
     public void setAllowanceHighTemperature(BigDecimal allowanceHighTemperature)
@@ -409,6 +431,16 @@ public class SalaryDetail extends BaseEntity
     public BigDecimal getAllowanceHighTemperature()
     {
         return allowanceHighTemperature;
+    }
+
+    public void setAllowanceAssessment(BigDecimal allowanceAssessment)
+    {
+        this.allowanceAssessment = allowanceAssessment;
+    }
+
+    public BigDecimal getAllowanceAssessment()
+    {
+        return allowanceAssessment;
     }
 
     public void setOvertimeDays(BigDecimal overtimeDays)
@@ -551,6 +583,16 @@ public class SalaryDetail extends BaseEntity
         return deductionSubtotal;
     }
 
+    public void setDeductionOther(BigDecimal deductionOther)
+    {
+        this.deductionOther = deductionOther;
+    }
+
+    public BigDecimal getDeductionOther()
+    {
+        return deductionOther;
+    }
+
     public void setNetSalary(BigDecimal netSalary)
     {
         this.netSalary = netSalary;
@@ -583,11 +625,13 @@ public class SalaryDetail extends BaseEntity
                 .append("allowanceConfidentiality", getAllowanceConfidentiality())
                 .append("allowanceTransportation", getAllowanceTransportation())
                 .append("allowanceSpecialCertificate", getAllowanceSpecialCertificate())
-                .append("allowanceHoliday", getAllowanceHoliday())
                 .append("allowancePerformance", getAllowancePerformance())
+                .append("allowanceHoliday", getAllowanceHoliday())
                 .append("allowanceSafetyTraining", getAllowanceSafetyTraining())
-                .append("allowanceAssessment", getAllowanceAssessment())
+                .append("allowanceOther", getAllowanceOther())
+                .append("allowanceOnduty", getAllowanceOnduty())
                 .append("allowanceHighTemperature", getAllowanceHighTemperature())
+                .append("allowanceAssessment", getAllowanceAssessment())
                 .append("overtimeDays", getOvertimeDays())
                 .append("overtimeAmount", getOvertimeAmount())
                 .append("overtimeMidShiftDays", getOvertimeMidShiftDays())
@@ -602,6 +646,7 @@ public class SalaryDetail extends BaseEntity
                 .append("deductionInsurance", getDeductionInsurance())
                 .append("deductionWithhold", getDeductionWithhold())
                 .append("deductionSubtotal", getDeductionSubtotal())
+                .append("deductionOther", getDeductionOther())
                 .append("netSalary", getNetSalary())
                 .append("createTime", getCreateTime())
                 .append("createBy", getCreateBy())
